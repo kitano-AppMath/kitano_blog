@@ -4,6 +4,7 @@
     <title>Series on 数値実験部屋</title>
     <link>https://kitano-AppMath.github.io/kitano_blog/series/</link>
     <description>Recent content in Series on 数値実験部屋</description>
-    <generator>Hugo -- gohugo.io</generator><atom:link href="https://kitano-AppMath.github.io/kitano_blog/series/index.xml" rel="self" type="application/rss+xml" />
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language><atom:link href="https://kitano-AppMath.github.io/kitano_blog/series/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>

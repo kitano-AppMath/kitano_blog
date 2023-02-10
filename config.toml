@@ -22,6 +22,7 @@ pygmentsCodefences = true
 enableEmoji = true
 
 # Missing translations will default to this content language
+languageCode = "ja"
 defaultContentLanguage = "en"
 
 [params.info]
@@ -29,7 +30,7 @@ description = ""
 title404 = "Not Found"
 
 [params.assets]
-favicon = "favicon.ico"
+favicon = "shark.png"
 customCSS = ["css/custom.css"]
 customJS = ["js/custom.js"]
 gopher = "" # used in 404 template ( Generator: https://gopherize.me )
@@ -78,7 +79,7 @@ titleSeparator = "•"
 #codepen = "MunifTanjim"
 #email = "contact@example.com"
 #facebook = "MunifTanjim"
-#github = "https://github.com/kitano-AppMath"
+github = "https://github.com/kitano-AppMath"
 #gitlab = "MunifTanjim"
 #instagram = "MunifTanjim"
 #linkedin = "muniftanjim"
