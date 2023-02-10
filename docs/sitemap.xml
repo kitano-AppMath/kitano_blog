@@ -2,8 +2,12 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://kitano-AppMath.github.io/kitano_blog/aboutme/</loc>
+    <lastmod>2023-02-10T21:14:23+09:00</lastmod>
+  </url><url>
     <loc>https://kitano-AppMath.github.io/kitano_blog/posts/</loc>
     <lastmod>2023-02-10T16:44:19+09:00</lastmod>
+    <priority>0</priority>
   </url><url>
     <loc>https://kitano-AppMath.github.io/kitano_blog/posts/test/</loc>
     <lastmod>2023-02-10T16:44:19+09:00</lastmod>

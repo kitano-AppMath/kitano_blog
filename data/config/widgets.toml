@@ -11,13 +11,13 @@ excludeParents = ["page"]            # default: ["page"]
 
 # Recent Posts Widget config
 [recent_posts]
-title = ""                            # default: "Recent Posts"
+title = "最新記事"                            # default: "Recent Posts"
 length = 4                            # default: 5
 excludeTypes = ["page"]               # default: ["page"]
 
 # Search Widget config
 [search]
-title = ""
+title = "検索"
 
 # Sidebar Menu Widget config
 [sidebar_menu]
@@ -31,6 +31,10 @@ platforms = ["github","twitter"]
 
 # Taxonomy Cloud Widget config
 [taxonomy_cloud]
-title = ""                            # default: Plural Name for `taxonomyCloud.taxonomy`
+title = "タグ"                            # default: Plural Name for `taxonomyCloud.taxonomy`
 taxonomy = "tags"                     # default: "tags"
-shuffle = true 
+shuffle = true
+
+[allposts]
+title="all_posts"
+url = "/posts/"
