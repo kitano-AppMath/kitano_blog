@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>数値実験部屋</title>
+    <link>http://www.example.com/</link>
+    <description>Recent content on 数値実験部屋</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Fri, 10 Feb 2023 16:44:19 +0900</lastBuildDate><atom:link href="http://www.example.com/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Test</title>
+      <link>http://www.example.com/posts/test/</link>
+      <pubDate>Fri, 10 Feb 2023 16:44:19 +0900</pubDate>
+      
+      <guid>http://www.example.com/posts/test/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
