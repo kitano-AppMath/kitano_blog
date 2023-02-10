@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://kitano-AppMath.github.io/kitano_blog/posts/</loc>
+    <lastmod>2023-02-10T16:44:19+09:00</lastmod>
+  </url><url>
+    <loc>https://kitano-AppMath.github.io/kitano_blog/posts/test/</loc>
+    <lastmod>2023-02-10T16:44:19+09:00</lastmod>
+  </url><url>
+    <loc>https://kitano-AppMath.github.io/kitano_blog/</loc>
+    <lastmod>2023-02-10T16:44:19+09:00</lastmod>
+  </url><url>
+    <loc>https://kitano-AppMath.github.io/kitano_blog/authors/</loc>
+  </url><url>
+    <loc>https://kitano-AppMath.github.io/kitano_blog/categories/</loc>
+  </url><url>
+    <loc>https://kitano-AppMath.github.io/kitano_blog/series/</loc>
+  </url><url>
+    <loc>https://kitano-AppMath.github.io/kitano_blog/tags/</loc>
+  </url>
+</urlset>
