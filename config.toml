@@ -78,11 +78,11 @@ titleSeparator = "•"
 #codepen = "MunifTanjim"
 #email = "contact@example.com"
 #facebook = "MunifTanjim"
-#github = "MunifTanjim"
+#github = "https://github.com/kitano-AppMath"
 #gitlab = "MunifTanjim"
 #instagram = "MunifTanjim"
 #linkedin = "muniftanjim"
-#twitter = "MunifTanjim"
+twitter = "https://twitter.com/kitano_blog"
 #telegram = "MunifTanjim"
 #google_scholar = "qc6CJjYAAAAJ"
 #youtube = "UCT-U0rNerYxItGcuoPX-WYA"
@@ -132,10 +132,11 @@ tag = "tags"
 page = "/:slug/"
 
 [[menu.main]]
-#name = "GitHub"
-#weight = -10
-#identifier = "github"
-#url = "https://github.com/kitano-AppMath"
+name = "GitHub"
+weight = -10
+identifier = "github"
+url = "https://github.com/kitano-AppMath"
+[[menu.main]]
 name = "Twitter"
 weight = -10
 identifier = "twitter"
