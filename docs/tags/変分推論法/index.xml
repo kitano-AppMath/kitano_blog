@@ -1,25 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>数値実験部屋</title>
-    <link>https://kitano-AppMath.github.io/kitano_blog/</link>
-    <description>Recent content on 数値実験部屋</description>
+    <title>変分推論法 on 数値実験部屋</title>
+    <link>https://kitano-AppMath.github.io/kitano_blog/tags/%E5%A4%89%E5%88%86%E6%8E%A8%E8%AB%96%E6%B3%95/</link>
+    <description>Recent content in 変分推論法 on 数値実験部屋</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Fri, 10 Feb 2023 16:44:19 +0900</lastBuildDate><atom:link href="https://kitano-AppMath.github.io/kitano_blog/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>中の人について</title>
-      <link>https://kitano-AppMath.github.io/kitano_blog/aboutme/</link>
-      <pubDate>Fri, 10 Feb 2023 21:14:23 +0900</pubDate>
-      
-      <guid>https://kitano-AppMath.github.io/kitano_blog/aboutme/</guid>
-      <description>初めまして，kitanoと申します．ここは簡単な自己紹介用のページです．
-目次 ブログ運営目的と方針 興味の対象 ブログ運営目的と方針 以前はドメインを取得して拙いブログを公開しておりましたが，Hugoを使って作り直すことにしました．以前書いた記事も修正して掲載し直す予定です．
-各記事は，基本的に，簡単な解説と実験を掲載するだけです．プログラミング言語としてはJulia言語を使っています．
-興味の対象 興味の対象，あるいはこれから勉強したいと思っている分野は以下の通りです．
-関数解析 確率論 数理統計学 最適化 機械学習 自然言語 複雑系 力学系 カオス 複雑ネットワーク 信号処理 数値解析・数値計算 Bayes統計・Bayes推定 コンピュータサイエンス 言語学 音声学 コーパス言語学 Julia言語 あと，中高生の頃からサメとクラシック音楽が好きです．</description>
-    </item>
-    
+    <lastBuildDate>Fri, 10 Feb 2023 16:44:19 +0900</lastBuildDate><atom:link href="https://kitano-AppMath.github.io/kitano_blog/tags/%E5%A4%89%E5%88%86%E6%8E%A8%E8%AB%96%E6%B3%95/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>変分推論法</title>
       <link>https://kitano-AppMath.github.io/kitano_blog/posts/2023-02-11/</link>

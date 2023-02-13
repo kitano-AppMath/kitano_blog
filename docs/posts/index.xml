@@ -8,12 +8,15 @@
     <language>ja</language>
     <lastBuildDate>Fri, 10 Feb 2023 16:44:19 +0900</lastBuildDate><atom:link href="https://kitano-AppMath.github.io/kitano_blog/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Test</title>
-      <link>https://kitano-AppMath.github.io/kitano_blog/posts/test/</link>
+      <title>変分推論法</title>
+      <link>https://kitano-AppMath.github.io/kitano_blog/posts/2023-02-11/</link>
       <pubDate>Fri, 10 Feb 2023 16:44:19 +0900</pubDate>
       
-      <guid>https://kitano-AppMath.github.io/kitano_blog/posts/test/</guid>
-      <description></description>
+      <guid>https://kitano-AppMath.github.io/kitano_blog/posts/2023-02-11/</guid>
+      <description>目次 変分推論法の概要 導入 問題設定 基本的な考え方 経験Bayes法との組み合わせ 平均場近似による方法 方針 例１：単純な例 勾配計算による方法 方針 例２：ロジスティック回帰 変分推論法の概要 ここでは，変分推論法の基本となる考え方を紹介する．
+導入 変分推論法とは，主にBayes推定において，複雑な事後分布を，より単純な分布で近似する最適化ベースの学習方法 を指す．具体的にどのような分布で近似するかは後に回して，ここでは，どのように近似するかを述べ，最適化問題として定式化しておこう．変分推論法の包括的な説明としては，Bealの博士論文1やBleiのレビュー論文2が参考になりそう．この記事の実験で使ったJuliaプログラムはこちら．
+問題設定 いま，手元には$N$次元データからなる有限集合$\mathcal{D}$があるとしよう．統計家は，データ点$x_1, \dots, x_{\#\mathcal{D}}\in\mathcal{D}$を，未知の真の分布$\mathcal{Q}$に従う独立な確率変数列$X_1, \dots, X_{\#\mathcal{D}}$の一組の実現値であると想定し，真の分布を推測するための確率モデル$\mathcal{P}_\theta$を作る．そして，予測分布$\mathcal{P}^* $を計算し，真の分布$\mathcal{Q}$はおおよそ${\mathcal{P}}^* $であろうと推測する．ただし，$\theta\in\Theta$は未知のパラメータであり，データと確率モデルから推定する必要がある．Bayes推定を用いる場合には，確率モデル$p(\cdot\mid\theta)$と，既知のパラメータ$\lambda\in\Lambda$を持つ事前分布$\pi_{\lambda}$を作り，次式で定義される事後分布を計算する： \begin{equation} \pi^*_{\lambda} (\theta\mid\mathcal{D}) = \frac{1}{\mathcal{M}_\lambda}\left[\prod_{x\in\mathcal{D}}p(x\mid\theta)\right]\pi_{\lambda}(\theta). \end{equation} ただし，$\mathcal{M}_{\lambda}$は周辺尤度と呼ばれ， \begin{equation} \mathcal{M}_{\lambda} = \int \left[\prod_{x\in\mathcal{D}}p(x\mid\theta)\right]\pi_{\lambda}(\theta)\mathrm{d}{\theta} \end{equation} で定義される．この事後分布に対して，（Bayes事後）予測分布を \begin{equation} {p_{\lambda}}^* (x) = \int p(x\mid\theta)\pi_{\lambda}^*(\theta\mid\mathcal{D})\mathrm{d}\theta \end{equation} と定義する．この記事では，事後分布の解析的な計算が難しい場合を考えよう．
+基本的な考え方 さて，冒頭で述べたように，変分推論法では事後分布を近似する．近似事後分布の族を$\mathcal{R}$とし，近似事後分布と事後分布との近さをKullback-Leiblerダイバージェンス \begin{equation} D_{\mathrm{KL}}[r \Vert \pi_{\lambda}^* ] = \int\log\left[\frac{r(\theta\mid\mathcal{D})}{\pi_{\lambda}^* (\theta\mid\mathcal{D})}\right]r(\theta\mid\mathcal{D})\mathrm{d}\theta, \quad r(\theta\mid\mathcal{D})\in\mathcal{R} \end{equation} で測ろう．これを最小化できると良いのだが，事後分布に周辺尤度の計算を含むため，次のような量を定義する： \begin{equation} \mathcal{L}_{\lambda}[r] = -D_{\mathrm{KL}}[r \Vert \pi_{\lambda}^* ] + \log \mathcal{M}_{\lambda}.</description>
     </item>
     
   </channel>
