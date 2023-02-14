@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>カオス on 数値実験部屋</title>
+    <link>https://kitano-AppMath.github.io/kitano_blog/tags/%E3%82%AB%E3%82%AA%E3%82%B9/</link>
+    <description>Recent content in カオス on 数値実験部屋</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <lastBuildDate>Tue, 14 Feb 2023 11:12:15 +0900</lastBuildDate><atom:link href="https://kitano-AppMath.github.io/kitano_blog/tags/%E3%82%AB%E3%82%AA%E3%82%B9/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Arnoldの猫写像</title>
+      <link>https://kitano-AppMath.github.io/kitano_blog/posts/2023-02-14/</link>
+      <pubDate>Tue, 14 Feb 2023 11:12:15 +0900</pubDate>
+      
+      <guid>https://kitano-AppMath.github.io/kitano_blog/posts/2023-02-14/</guid>
+      <description>目次 定義とお絵描き 概要 定義 サメの絵で実験 定義とお絵描き Arnoldの猫写像を定義して，かる〜く実験する．画像さえあれば実験できるので，やってみてね．
+概要 Arnoldの猫写像とは，Arnoldが作った，2次元から2次元への&amp;quot;chaotic&amp;quot;な写像である．そして入力の画像にはなぜか猫のイラストが使われる．応用としては，カオスベースの画像暗号化技術などが挙げられる1．後ほど見るように，この写像には周期がある．暗号化など，セキュリティ分野への応用を考えれば，周期の研究に関心が向くのは自然だろう．どうやらDyson and Folk2の研究が代表的らしい．Bao and Yang1でも周期に関する公式が導出されている．Fibonacci数列との関連も興味深いが，この記事ではネット上の講義資料3を参考にいくつか実験してみよう．実験に使ったJuliaプログラムはこちら．
+定義 定義【Arnoldの猫写像】 自然数$N$に対して，Arnoldの猫写像とは，次式で定まる写像$F\colon\mathbb{R}^2\to\mathbb{R}^2$を指す： \begin{equation} F\left(\begin{bmatrix} x \\ y \end{bmatrix}\right) = \begin{bmatrix} 1 &amp; 1 \\ 1 &amp; 2 \end{bmatrix}\begin{bmatrix} x \\ y \end{bmatrix} \quad \pmod N. \end{equation} また，冒頭に述べた周期も定義しておこう．
+定義【周期】 自然数$N$とArnoldの猫写像$F$に対して， \begin{equation} T = \mathrm{argmin}\left\{ k\in\mathbb{N} \mid \text{任意の点$p$に対して，}F^k(p) = p \right\} \end{equation} を周期という．
+サメの絵で実験 次のような画像で実験してみよう．
+この画像に猫写像を何度か作用させるのだ．一旦はぐちゃぐちゃになるんだが，何度か作用させると元に戻る．このとき，作用させた回数が周期だ．まあ，とりあえずやってみよう．$15$回ほど反復させた図を下図に示した．
+画像サイズ$N$に対して周期がどのように変化するか調べてみよう．周期に関してはいくつか式が知られているが，ここではコンピュータの力を借りて愚直に調べる．画像サイズ$N$を変化させるごとに，猫写像を何度も作用させ，画像が一致するまで繰り返す．下図の横軸が$N$，縦軸が周期である．傾向として，$N$が大きくなるに従って周期も大きくなる．また，なんとなく規則性もありそう...
+J. Bao and Q. Yang. Period of the discrete Arnold cat map and general cat map, Nonlinear Dynamics, 70(2012), pp.</description>
+    </item>
+    
+  </channel>
+</rss>
