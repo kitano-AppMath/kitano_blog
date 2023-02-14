@@ -245,7 +245,7 @@
 <p>　ここでは，変分推論法の基本となる考え方を紹介する．</p>
 <h2 id="導入">導入</h2>
 <p>　変分推論法とは，主にBayes推定において，<span style="background: linear-gradient(transparent 50%, #fafba4 30%);">複雑な事後分布を，より単純な分布で近似する最適化ベースの学習方法</span>
-を指す．具体的にどのような分布で近似するかは後に回して，ここでは，どのように近似するかを述べ，最適化問題として定式化しておこう．変分推論法の包括的な説明としては，Bealの博士論文<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>やBleiのレビュー論文<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>が参考になりそう．この記事の実験で使ったJuliaプログラムは<a href="https://github.com/kitano-AppMath/statistics/blob/main/Variational-Inference.ipynb">こちら</a>．</p>
+を指す．具体的にどのような分布で近似するかは後に回して，ここでは，どのように近似するかを述べ，最適化問題として定式化しておこう．変分推論法の包括的な説明としては，Bealの博士論文<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>やBleiのレビュー論文<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>が参考になりそう．この記事の実験で使ったJuliaプログラムは<a href="https://github.com/kitano-AppMath/my-julia-works/blob/main/Variational-Inference.ipynb">こちら</a>．</p>
 <h2 id="問題設定">問題設定</h2>
 <div>
 <p>　いま，手元には$N$次元データからなる有限集合$\mathcal{D}$があるとしよう．統計家は，データ点$x_1, \dots, x_{\#\mathcal{D}}\in\mathcal{D}$を，未知の真の分布$\mathcal{Q}$に従う独立な確率変数列$X_1, \dots, X_{\#\mathcal{D}}$の一組の実現値であると想定し，真の分布を推測するための確率モデル$\mathcal{P}_\theta$を作る．そして，予測分布$\mathcal{P}^* $を計算し，真の分布$\mathcal{Q}$はおおよそ${\mathcal{P}}^* $であろうと推測する．ただし，$\theta\in\Theta$は未知のパラメータであり，データと確率モデルから推定する必要がある．Bayes推定を用いる場合には，確率モデル$p(\cdot\mid\theta)$と，<u>既知</u>のパラメータ$\lambda\in\Lambda$を持つ事前分布$\pi_{\lambda}$を作り，次式で定義される事後分布を計算する：
