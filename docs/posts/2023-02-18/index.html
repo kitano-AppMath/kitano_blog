@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang='en' dir='auto'><head>
+  <meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta name='description' content='目次 定理の概要と例 概要 定理の内容 例１：単純な例 例２：相似変換 例３：狭義優対角行列 定理の概要と例 概要 Gershgorinの定理1は，行列の固有値のおおよその存在範囲を教えてくれる，ありがたい定理である．この定理だけで一冊の本2になるほどご利益がある．応用としては，数値解析をはじめ，グラフ理論などにも利用される．主張自体は数値解析の書籍3に書いてあることが多いが，ここではN. Highamのブログ記事4を参考にして，いくつか例を調べてみよう．実験に使ったJuliaプログラムはこちら．
+定理の内容 定理のstatementは以下の通りだ．
+定理（Gershgorinの定理） 複素正方行列$A=(a_{ij})\in\mathbb{C}^{n\times n}$と，その任意の固有値$\lambda$に対して，次式が成り立つ： \begin{equation} \lambda \in \bigcup_{i=1}^{n}\left\{ z\in\mathbb{C} \mid |z-a_{ii}| \leq \sum_{j\neq i}{|a_{ij}|} \right\}. \end{equation} つまり，任意の固有値の存在範囲が閉円盤の和集合に限定される ことを主張している．しかも存在範囲は行列の成分からすぐに分かる．ここで注意点だが，固有値を含む円盤が存在することを主張しているだけで，当然，固有値を含まない円盤が存在する可能性もある ．しかし，実は，上の定理の精密化5が存在して，固有値を含まない円盤が他の円盤と独立して存在する可能性は排除される．つまり，固有値を含まない円盤は，固有値を含む他の円盤と必ず繋がっている．まあ，とりあえず例を見てみよう．
+例１：単純な例 適当に行列を作って試してみよう．今回使った行列は \begin{equation} A_1 = \begin{bmatrix} 1&0&1&#43;i&1&0\\ -1&-1&0&-1&0\\ 2&1&1&-1&0\\ 0&2&1&1&0\\ 2&0&1&0&1 \end{bmatrix}. \end{equation} 下図の赤い円が円盤の境界，黒点が固有値である．
+例２：相似変換 行列の相似変換により固有値は変わらないが，当然，円盤は変わる．Gershgorinの定理の観点から，対角化などの相似変換について考えてみよう．行列の対角化ができるならば，非対角成分が零になるから，円盤の半径も零になる．つまり，円盤は固有値の点に潰れるわけだ．Gershgorinの定理が固有値の存在範囲に関する情報を与えることを考えると，対角化のようなコストのかかる変換により固有値の存在範囲が絞られるのは自然なことである．同様に考えれば，仮に対角化まではできなくても，対角化に準ずる変換により固有値の存在範囲を絞る ことができると考えられる．ここでは上三角化を考えてみよう．
+次のような行列を考えよう： \begin{equation} A_2 = \begin{bmatrix} -1&1&0\\ 1&3&1\\ 1&-3&0 \end{bmatrix}. \end{equation} このとき，正則行列 \begin{equation} P_2 = \begin{bmatrix} 1&0&0\\ 0&1&0\\ -1&-2&1\end{bmatrix} \end{equation} により， \begin{equation} \Lambda_2 = P_2^{-1}A_2P_2 = \begin{bmatrix} -1&1&0\\0&1&1\\0&0&2\end{bmatrix} \end{equation} と上三角化できる．円盤が小さくなったか確認してみよう．左下図は元の行列$A_2$，右下図はその上三角化$\Lambda_2$である．確かに固有値の存在範囲がより狭くなっている．'>
+<meta name='theme-color' content='#ffcd00'>
+
+<meta property='og:title' content='Gershgorinの定理 • 数値実験部屋'>
+<meta property='og:description' content='目次 定理の概要と例 概要 定理の内容 例１：単純な例 例２：相似変換 例３：狭義優対角行列 定理の概要と例 概要 Gershgorinの定理1は，行列の固有値のおおよその存在範囲を教えてくれる，ありがたい定理である．この定理だけで一冊の本2になるほどご利益がある．応用としては，数値解析をはじめ，グラフ理論などにも利用される．主張自体は数値解析の書籍3に書いてあることが多いが，ここではN. Highamのブログ記事4を参考にして，いくつか例を調べてみよう．実験に使ったJuliaプログラムはこちら．
+定理の内容 定理のstatementは以下の通りだ．
+定理（Gershgorinの定理） 複素正方行列$A=(a_{ij})\in\mathbb{C}^{n\times n}$と，その任意の固有値$\lambda$に対して，次式が成り立つ： \begin{equation} \lambda \in \bigcup_{i=1}^{n}\left\{ z\in\mathbb{C} \mid |z-a_{ii}| \leq \sum_{j\neq i}{|a_{ij}|} \right\}. \end{equation} つまり，任意の固有値の存在範囲が閉円盤の和集合に限定される ことを主張している．しかも存在範囲は行列の成分からすぐに分かる．ここで注意点だが，固有値を含む円盤が存在することを主張しているだけで，当然，固有値を含まない円盤が存在する可能性もある ．しかし，実は，上の定理の精密化5が存在して，固有値を含まない円盤が他の円盤と独立して存在する可能性は排除される．つまり，固有値を含まない円盤は，固有値を含む他の円盤と必ず繋がっている．まあ，とりあえず例を見てみよう．
+例１：単純な例 適当に行列を作って試してみよう．今回使った行列は \begin{equation} A_1 = \begin{bmatrix} 1&0&1&#43;i&1&0\\ -1&-1&0&-1&0\\ 2&1&1&-1&0\\ 0&2&1&1&0\\ 2&0&1&0&1 \end{bmatrix}. \end{equation} 下図の赤い円が円盤の境界，黒点が固有値である．
+例２：相似変換 行列の相似変換により固有値は変わらないが，当然，円盤は変わる．Gershgorinの定理の観点から，対角化などの相似変換について考えてみよう．行列の対角化ができるならば，非対角成分が零になるから，円盤の半径も零になる．つまり，円盤は固有値の点に潰れるわけだ．Gershgorinの定理が固有値の存在範囲に関する情報を与えることを考えると，対角化のようなコストのかかる変換により固有値の存在範囲が絞られるのは自然なことである．同様に考えれば，仮に対角化まではできなくても，対角化に準ずる変換により固有値の存在範囲を絞る ことができると考えられる．ここでは上三角化を考えてみよう．
+次のような行列を考えよう： \begin{equation} A_2 = \begin{bmatrix} -1&1&0\\ 1&3&1\\ 1&-3&0 \end{bmatrix}. \end{equation} このとき，正則行列 \begin{equation} P_2 = \begin{bmatrix} 1&0&0\\ 0&1&0\\ -1&-2&1\end{bmatrix} \end{equation} により， \begin{equation} \Lambda_2 = P_2^{-1}A_2P_2 = \begin{bmatrix} -1&1&0\\0&1&1\\0&0&2\end{bmatrix} \end{equation} と上三角化できる．円盤が小さくなったか確認してみよう．左下図は元の行列$A_2$，右下図はその上三角化$\Lambda_2$である．確かに固有値の存在範囲がより狭くなっている．'>
+<meta property='og:url' content='https://kitano-AppMath.github.io/kitano_blog/posts/2023-02-18/'>
+<meta property='og:site_name' content='数値実験部屋'>
+<meta property='og:type' content='article'><meta property='article:section' content='posts'><meta property='article:tag' content='固有値'><meta property='article:tag' content='行列'><meta property='article:tag' content='Julia言語'><meta property='article:published_time' content='2023-02-18T00:21:07&#43;09:00'/><meta property='article:modified_time' content='2023-02-18T00:21:07&#43;09:00'/><meta name='twitter:card' content='summary'>
+
+<meta name="generator" content="Hugo 0.106.0">
+
+  <title>Gershgorinの定理 • 数値実験部屋</title>
+  <link rel='canonical' href='https://kitano-AppMath.github.io/kitano_blog/posts/2023-02-18/'>
+  
+  
+  <link rel='icon' href='https://kitano-AppMath.github.io/kitano_blog/shark.png'>
+<link rel='stylesheet' href='https://kitano-AppMath.github.io/kitano_blog/assets/css/main.ab98e12b.css'><link rel='stylesheet' href='https://kitano-AppMath.github.io/kitano_blog/css/custom.css'><style>
+:root{--color-accent:#ffcd00;}
+</style>
+
+  
+
+</head>
+<body class='page type-posts has-sidebar'>
+
+  <div class='site'><div id='sidebar' class='sidebar'>
+  <a class='screen-reader-text' href='#main-menu'>Skip to Main Menu</a>
+
+  <div class='container'><section class='widget widget-about sep-after'>
+  <header>
+    
+    <div class='logo'>
+      <a href='https://kitano-AppMath.github.io/kitano_blog/'>
+        <img src='https://kitano-AppMath.github.io/kitano_blog/shark.png'>
+      </a>
+    </div>
+    
+    <h2 class='title site-title '>
+      <a href='https://kitano-AppMath.github.io/kitano_blog/'>
+      数値実験部屋
+      </a>
+    </h2>
+    <div class='desc'>
+    
+    </div>
+  </header>
+
+</section>
+<section class='widget widget-recent_posts sep-after'>
+  <header>
+    <h4 class='title widget-title'>最新記事</h4>
+  </header>
+
+  <ul class='list'>
+  
+    <li class='item'>
+  <div class='meta'>
+    <span>
+  <span class='screen-reader-text'>Posted on </span>
+  <time datetime='2023-02-18T00:21:07&#43;09:00'>2023/02/18</time>
+</span>
+
+  </div>
+  <header class='item-header'>
+    <h3 class='item-title'>
+      <a href='https://kitano-AppMath.github.io/kitano_blog/posts/2023-02-18/'>Gershgorinの定理</a>
+    </h3>
+  </header>
+</li>
+
+  
+    <li class='item'>
+  <div class='meta'>
+    <span>
+  <span class='screen-reader-text'>Posted on </span>
+  <time datetime='2023-02-14T11:12:15&#43;09:00'>2023/02/14</time>
+</span>
+
+  </div>
+  <header class='item-header'>
+    <h3 class='item-title'>
+      <a href='https://kitano-AppMath.github.io/kitano_blog/posts/2023-02-14/'>Arnoldの猫写像</a>
+    </h3>
+  </header>
+</li>
+
+  
+    <li class='item'>
+  <div class='meta'>
+    <span>
+  <span class='screen-reader-text'>Posted on </span>
+  <time datetime='2023-02-10T16:44:19&#43;09:00'>2023/02/10</time>
+</span>
+
+  </div>
+  <header class='item-header'>
+    <h3 class='item-title'>
+      <a href='https://kitano-AppMath.github.io/kitano_blog/posts/2023-02-11/'>変分推論法</a>
+    </h3>
+  </header>
+</li>
+
+  
+  </ul>
+</section>
+<section class='widget widget-taxonomy_cloud sep-after'>
+  <header>
+    <h4 class='title widget-title'>タグ</h4>
+  </header>
+
+  <div class='container list-container'>
+  <ul class='list taxonomy-cloud'><li>
+        <a href='https://kitano-AppMath.github.io/kitano_blog/tags/bayes/' style='font-size:1em'>Bayes</a>
+      </li><li>
+        <a href='https://kitano-AppMath.github.io/kitano_blog/tags/julia%E8%A8%80%E8%AA%9E/' style='font-size:2em'>Julia言語</a>
+      </li><li>
+        <a href='https://kitano-AppMath.github.io/kitano_blog/tags/%E3%82%AB%E3%82%AA%E3%82%B9/' style='font-size:1em'>カオス</a>
+      </li><li>
+        <a href='https://kitano-AppMath.github.io/kitano_blog/tags/%E5%9B%BA%E6%9C%89%E5%80%A4/' style='font-size:1em'>固有値</a>
+      </li><li>
+        <a href='https://kitano-AppMath.github.io/kitano_blog/tags/%E5%A4%89%E5%88%86%E6%8E%A8%E8%AB%96%E6%B3%95/' style='font-size:1em'>変分推論法</a>
+      </li><li>
+        <a href='https://kitano-AppMath.github.io/kitano_blog/tags/%E8%A1%8C%E5%88%97/' style='font-size:1em'>行列</a>
+      </li></ul>
+</div>
+
+
+</section>
+</div>
+
+  <div class='sidebar-overlay'></div>
+</div><div class='main'><nav id='main-menu' class='menu main-menu' aria-label='Main Menu'>
+  <div class='container'>
+    <a class='screen-reader-text' href='#content'>Skip to Content</a>
+
+<button id='sidebar-toggler' class='sidebar-toggler' aria-controls='sidebar'>
+  <span class='screen-reader-text'>Toggle Sidebar</span>
+  <span class='open'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="3" y1="12" x2="21" y2="12" />
+<line x1="3" y1="6" x2="21" y2="6" />
+<line x1="3" y1="18" x2="21" y2="18" />
+</svg>
+</span>
+  <span class='close'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="18" y1="6" x2="6" y2="18" />
+<line x1="6" y1="6" x2="18" y2="18" />
+</svg>
+</span>
+</button>
+    <ul><li class='item'>
+        <a href='https://kitano-AppMath.github.io/kitano_blog/'>ホーム</a>
+      </li><li class='item'>
+        <a href='https://kitano-AppMath.github.io/kitano_blog/posts/'>記事一覧</a>
+      </li><li class='item'>
+        <a href='https://twitter.com/kitano_blog'>Twitter</a>
+      </li><li class='item'>
+        <a href='https://github.com/kitano-AppMath'>GitHub</a>
+      </li><li class='item'>
+        <a href='https://kitano-AppMath.github.io/kitano_blog/aboutme'>中の人</a>
+      </li></ul>
+  </div>
+</nav><div class='header-widgets'>
+        <div class='container'></div>
+      </div>
+
+      <header id='header' class='header site-header'>
+        <div class='container sep-after'>
+          <div class='header-info'><p class='site-title title'>数値実験部屋</p><p class='desc site-desc'></p>
+          </div>
+        </div>
+      </header>
+
+      <main id='content'>
+
+
+<article lang='en' class='entry'>
+  <header class='header entry-header'>
+  <div class='container sep-after'>
+    <div class='header-info'>
+      <h1 class='title'>Gershgorinの定理</h1>
+      
+
+    </div>
+    <div class='entry-meta'>
+  <span class='posted-on'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+<line x1="16" y1="2" x2="16" y2="6" />
+<line x1="8" y1="2" x2="8" y2="6" />
+<line x1="3" y1="10" x2="21" y2="10" />
+</svg>
+<span class='screen-reader-text'>Posted on </span>
+  <time class='entry-date' datetime='2023-02-18T00:21:07&#43;09:00'>2023/02/ 18</time>
+</span>
+
+  
+  
+<span class='reading-time'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><circle cx="12" cy="12" r="10" />
+<polyline points="12 6 12 12 15 15" />
+</svg>
+One min read
+</span>
+
+
+</div>
+
+
+  </div>
+</header>
+
+  
+  
+
+  <div class='container entry-content'>
+  <div>
+    <h2>目次</h2>
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#定理の概要と例">定理の概要と例</a>
+      <ul>
+        <li><a href="#概要">概要</a></li>
+        <li><a href="#定理の内容">定理の内容</a></li>
+        <li><a href="#例１単純な例">例１：単純な例</a></li>
+        <li><a href="#例２相似変換">例２：相似変換</a></li>
+        <li><a href="#例３狭義優対角行列">例３：狭義優対角行列</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+</div>
+
+<hr>
+<h1 id="定理の概要と例">定理の概要と例</h1>
+<h2 id="概要">概要</h2>
+<p>　<strong>Gershgorinの定理</strong><sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>は，行列の固有値のおおよその存在範囲を教えてくれる，ありがたい定理である．この定理だけで一冊の本<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>になるほどご利益がある．応用としては，数値解析をはじめ，グラフ理論などにも利用される．主張自体は数値解析の書籍<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>に書いてあることが多いが，ここではN. Highamのブログ記事<sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup>を参考にして，いくつか例を調べてみよう．実験に使ったJuliaプログラムは<a href="https://github.com/kitano-AppMath/my-julia-works/blob/main/Gershgorin's-Theorem.ipynb">こちら</a>．</p>
+<h2 id="定理の内容">定理の内容</h2>
+<p>　定理のstatementは以下の通りだ．</p>
+<div>
+<b>定理</b>（Gershgorinの定理）
+<p>　複素正方行列$A=(a_{ij})\in\mathbb{C}^{n\times n}$と，その任意の固有値$\lambda$に対して，次式が成り立つ：
+\begin{equation}
+\lambda \in \bigcup_{i=1}^{n}\left\{ z\in\mathbb{C} \mid  |z-a_{ii}| \leq \sum_{j\neq i}{|a_{ij}|} \right\}.  
+\end{equation}
+</p>
+</div>
+<p>つまり，<span style="background: linear-gradient(transparent 50%, #fafba4 30%);">任意の固有値の存在範囲が閉円盤の和集合に限定される</span>
+ことを主張している．しかも存在範囲は行列の成分からすぐに分かる．ここで注意点だが，固有値を含む円盤が存在することを主張しているだけで，当然，<span style="background: linear-gradient(transparent 50%, #fafba4 30%);">固有値を含まない円盤が存在する可能性もある</span>
+．しかし，実は，上の定理の精密化<sup id="fnref:5"><a href="#fn:5" class="footnote-ref" role="doc-noteref">5</a></sup>が存在して，固有値を含まない円盤が他の円盤と独立して存在する可能性は排除される．つまり，固有値を含まない円盤は，固有値を含む他の円盤と必ず繋がっている．まあ，とりあえず例を見てみよう．</p>
+<h2 id="例１単純な例">例１：単純な例</h2>
+<div>
+<p>　適当に行列を作って試してみよう．今回使った行列は
+\begin{equation}
+    A_1 = \begin{bmatrix} 1&0&1+i&1&0\\ -1&-1&0&-1&0\\ 2&1&1&-1&0\\ 0&2&1&1&0\\ 2&0&1&0&1 \end{bmatrix}.  
+\end{equation}
+下図の赤い円が円盤の境界，黒点が固有値である．</p>
+<img src="https://kitano-AppMath.github.io/kitano_blog/2023-02-18/fig1.png" alt="実験結果" />
+</div>
+<h2 id="例２相似変換">例２：相似変換</h2>
+<div>
+<p>　行列の<b>相似変換</b>により固有値は変わらないが，当然，円盤は変わる．Gershgorinの定理の観点から，対角化などの相似変換について考えてみよう．行列の対角化ができるならば，非対角成分が零になるから，円盤の半径も零になる．つまり，円盤は固有値の点に潰れるわけだ．Gershgorinの定理が固有値の存在範囲に関する情報を与えることを考えると，対角化のようなコストのかかる変換により固有値の存在範囲が絞られるのは自然なことである．同様に考えれば，仮に対角化まではできなくても，対角化に準ずる変換により<span style="background: linear-gradient(transparent 50%, #fafba4 30%);">固有値の存在範囲を絞る</span>
+ことができると考えられる．ここでは上三角化を考えてみよう．</p>
+<p>　次のような行列を考えよう：
+\begin{equation}
+    A_2 = \begin{bmatrix}  -1&1&0\\ 1&3&1\\ 1&-3&0 \end{bmatrix}.  
+\end{equation}
+このとき，正則行列
+\begin{equation}
+    P_2 = \begin{bmatrix}  1&0&0\\ 0&1&0\\ -1&-2&1\end{bmatrix}
+\end{equation}
+により，
+\begin{equation}
+    \Lambda_2 = P_2^{-1}A_2P_2 = \begin{bmatrix}  -1&1&0\\0&1&1\\0&0&2\end{bmatrix}
+\end{equation}
+と上三角化できる．円盤が小さくなったか確認してみよう．左下図は元の行列$A_2$，右下図はその上三角化$\Lambda_2$である．確かに固有値の存在範囲がより狭くなっている．</p>
+<img src="https://kitano-AppMath.github.io/kitano_blog/2023-02-18/fig2.png" alt="実験結果" />
+</div>
+<h2 id="例３狭義優対角行列">例３：狭義優対角行列</h2>
+<div>
+<p>　最後に，狭義優対角行列を採りあげる．狭義優対角行列は，次のように定義される行列で，数値解析ではよく出てくる．</p>
+<b>定義</b>（狭義優対角行列）
+<p>　実正方行列$A=(a_{ij}) \in\mathbb{R}^{n\times n}$は，任意の$i=1, \dots, n$に対して次式を満たすとき，狭義優対角行列であるという：
+\begin{equation}
+    |a_{ii}| > \sum_{j\neq i}|a_{ij}|.  
+\end{equation}</p>
+<p>この定義とGershgorinの定理を比べてみよう．Gershgorinの定理において，もし零がいずれかの円盤に含まれるならば狭義優対角行列の定義に反する．従って，<span style="background: linear-gradient(transparent 50%, #fafba4 30%);">狭義優対角行列に対する円盤はいずれも零を含まない</span>
+．逆もまた然り．例で見てみよう．</p>
+<p>　狭義優対角行列
+\begin{equation}
+    A_3 = \begin{bmatrix}  4&-1&1\\ 2&-6&3\\ -1&-1&3 \end{bmatrix}
+\end{equation}
+の円盤と固有値は以下の通りである．確かに零を含まない．</p>
+<img src="https://kitano-AppMath.github.io/kitano_blog/2023-02-18/fig3.png" alt="実験結果" />
+</div>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p>S. Gerschgorin. Über die Abgrenzung der Eigenwerte einer Matrix. Bulletin de l&rsquo;Académie des Sciences de l&rsquo;URSS. Classe des sciences mathématiques et na, 6(1931), pp. 749–754.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2">
+<p>R. S. Varga. Geršgorin and His Circles, Springer, Berlin, 2004.&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:3">
+<p>森正武. 数値解析 第2版. 共立出版, 2018.&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:4">
+<p>N. Higham. What Is Gershgorin’s Theorem?. <a href="https://nhigham.com/2022/11/22/what-is-gershgorins-theorem">https://nhigham.com/2022/11/22/what-is-gershgorins-theorem</a> .&#160;<a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:5">
+<p>笠原晧司. 行列の構造. 日本評論社, 1994.&#160;<a href="#fnref:5" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
+
+</div>
+
+  
+<footer class='entry-footer'>
+  <div class='container sep-before'><div class='tags'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M20.59,13.41l-7.17,7.17a2,2,0,0,1-2.83,0L2,12V2H12l8.59,8.59A2,2,0,0,1,20.59,13.41Z" />
+<line x1="7" y1="7" x2="7" y2="7" />
+</svg>
+<span class='screen-reader-text'>Tags: </span><a class='tag' href='https://kitano-AppMath.github.io/kitano_blog/tags/%E5%9B%BA%E6%9C%89%E5%80%A4/'>固有値</a>, <a class='tag' href='https://kitano-AppMath.github.io/kitano_blog/tags/%E8%A1%8C%E5%88%97/'>行列</a>, <a class='tag' href='https://kitano-AppMath.github.io/kitano_blog/tags/julia%E8%A8%80%E8%AA%9E/'>Julia言語</a></div>
+
+  </div>
+</footer>
+
+
+</article>
+
+<nav class='entry-nav'>
+  <div class='container'><div class='prev-entry sep-before'>
+      <a href='https://kitano-AppMath.github.io/kitano_blog/posts/2023-02-14/'>
+        <span aria-hidden='true'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="20" y1="12" x2="4" y2="12" />
+<polyline points="10 18 4 12 10 6" />
+</svg>
+ Previous</span>
+        <span class='screen-reader-text'>Previous post: </span>Arnoldの猫写像</a>
+    </div></div>
+</nav>
+
+
+
+
+      </main>
+
+      <footer id='footer' class='footer'>
+        <div class='container sep-before'><div class='copyright'>
+  <p> &copy; 2023 kitano </p>
+</div>
+
+        </div>
+      </footer>
+
+    </div>
+  </div><script>window.__assets_js_src="https://kitano-AppMath.github.io/kitano_blog/assets/js/"</script>
+
+<script src='https://kitano-AppMath.github.io/kitano_blog/assets/js/main.c3bcf2df.js'></script><script src='https://kitano-AppMath.github.io/kitano_blog/js/custom.js'></script><script type='text/x-mathjax-config'>
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"processEscapes":true}})
+</script>
+
+<script type='text/javascript' async src='//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML'></script>
+
+</body>
+
+</html>
+

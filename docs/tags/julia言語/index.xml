@@ -6,7 +6,21 @@
     <description>Recent content in Julia言語 on 数値実験部屋</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Tue, 14 Feb 2023 11:12:15 +0900</lastBuildDate><atom:link href="https://kitano-AppMath.github.io/kitano_blog/tags/julia%E8%A8%80%E8%AA%9E/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 18 Feb 2023 00:21:07 +0900</lastBuildDate><atom:link href="https://kitano-AppMath.github.io/kitano_blog/tags/julia%E8%A8%80%E8%AA%9E/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Gershgorinの定理</title>
+      <link>https://kitano-AppMath.github.io/kitano_blog/posts/2023-02-18/</link>
+      <pubDate>Sat, 18 Feb 2023 00:21:07 +0900</pubDate>
+      
+      <guid>https://kitano-AppMath.github.io/kitano_blog/posts/2023-02-18/</guid>
+      <description>目次 定理の概要と例 概要 定理の内容 例１：単純な例 例２：相似変換 例３：狭義優対角行列 定理の概要と例 概要 Gershgorinの定理1は，行列の固有値のおおよその存在範囲を教えてくれる，ありがたい定理である．この定理だけで一冊の本2になるほどご利益がある．応用としては，数値解析をはじめ，グラフ理論などにも利用される．主張自体は数値解析の書籍3に書いてあることが多いが，ここではN. Highamのブログ記事4を参考にして，いくつか例を調べてみよう．実験に使ったJuliaプログラムはこちら．
+定理の内容 定理のstatementは以下の通りだ．
+定理（Gershgorinの定理） 複素正方行列$A=(a_{ij})\in\mathbb{C}^{n\times n}$と，その任意の固有値$\lambda$に対して，次式が成り立つ： \begin{equation} \lambda \in \bigcup_{i=1}^{n}\left\{ z\in\mathbb{C} \mid |z-a_{ii}| \leq \sum_{j\neq i}{|a_{ij}|} \right\}. \end{equation} つまり，任意の固有値の存在範囲が閉円盤の和集合に限定される ことを主張している．しかも存在範囲は行列の成分からすぐに分かる．ここで注意点だが，固有値を含む円盤が存在することを主張しているだけで，当然，固有値を含まない円盤が存在する可能性もある ．しかし，実は，上の定理の精密化5が存在して，固有値を含まない円盤が他の円盤と独立して存在する可能性は排除される．つまり，固有値を含まない円盤は，固有値を含む他の円盤と必ず繋がっている．まあ，とりあえず例を見てみよう．
+例１：単純な例 適当に行列を作って試してみよう．今回使った行列は \begin{equation} A_1 = \begin{bmatrix} 1&amp;0&amp;1+i&amp;1&amp;0\\ -1&amp;-1&amp;0&amp;-1&amp;0\\ 2&amp;1&amp;1&amp;-1&amp;0\\ 0&amp;2&amp;1&amp;1&amp;0\\ 2&amp;0&amp;1&amp;0&amp;1 \end{bmatrix}. \end{equation} 下図の赤い円が円盤の境界，黒点が固有値である．
+例２：相似変換 行列の相似変換により固有値は変わらないが，当然，円盤は変わる．Gershgorinの定理の観点から，対角化などの相似変換について考えてみよう．行列の対角化ができるならば，非対角成分が零になるから，円盤の半径も零になる．つまり，円盤は固有値の点に潰れるわけだ．Gershgorinの定理が固有値の存在範囲に関する情報を与えることを考えると，対角化のようなコストのかかる変換により固有値の存在範囲が絞られるのは自然なことである．同様に考えれば，仮に対角化まではできなくても，対角化に準ずる変換により固有値の存在範囲を絞る ことができると考えられる．ここでは上三角化を考えてみよう．
+次のような行列を考えよう： \begin{equation} A_2 = \begin{bmatrix} -1&amp;1&amp;0\\ 1&amp;3&amp;1\\ 1&amp;-3&amp;0 \end{bmatrix}. \end{equation} このとき，正則行列 \begin{equation} P_2 = \begin{bmatrix} 1&amp;0&amp;0\\ 0&amp;1&amp;0\\ -1&amp;-2&amp;1\end{bmatrix} \end{equation} により， \begin{equation} \Lambda_2 = P_2^{-1}A_2P_2 = \begin{bmatrix} -1&amp;1&amp;0\\0&amp;1&amp;1\\0&amp;0&amp;2\end{bmatrix} \end{equation} と上三角化できる．円盤が小さくなったか確認してみよう．左下図は元の行列$A_2$，右下図はその上三角化$\Lambda_2$である．確かに固有値の存在範囲がより狭くなっている．</description>
+    </item>
+    
     <item>
       <title>Arnoldの猫写像</title>
       <link>https://kitano-AppMath.github.io/kitano_blog/posts/2023-02-14/</link>
@@ -15,8 +29,8 @@
       <guid>https://kitano-AppMath.github.io/kitano_blog/posts/2023-02-14/</guid>
       <description>目次 定義とお絵描き 概要 定義 サメの絵で実験 定義とお絵描き Arnoldの猫写像を定義して，かる〜く実験する．画像さえあれば実験できるので，やってみてね．
 概要 Arnoldの猫写像とは，Arnoldが作った，2次元から2次元への&amp;quot;chaotic&amp;quot;な写像である．そして入力の画像にはなぜか猫のイラストが使われる．応用としては，カオスベースの画像暗号化技術などが挙げられる1．後ほど見るように，この写像には周期がある．暗号化など，セキュリティ分野への応用を考えれば，周期の研究に関心が向くのは自然だろう．どうやらDyson and Folk2の研究が代表的らしい．Bao and Yang1でも周期に関する公式が導出されている．Fibonacci数列との関連も興味深いが，この記事ではネット上の講義資料3を参考にいくつか実験してみよう．実験に使ったJuliaプログラムはこちら．
-定義 定義【Arnoldの猫写像】 自然数$N$に対して，Arnoldの猫写像とは，次式で定まる写像$F\colon\mathbb{R}^2\to\mathbb{R}^2$を指す： \begin{equation} F\left(\begin{bmatrix} x \\ y \end{bmatrix}\right) = \begin{bmatrix} 1 &amp; 1 \\ 1 &amp; 2 \end{bmatrix}\begin{bmatrix} x \\ y \end{bmatrix} \quad \pmod N. \end{equation} また，冒頭に述べた周期も定義しておこう．
-定義【周期】 自然数$N$とArnoldの猫写像$F$に対して， \begin{equation} T = \min\left\{ k\in\mathbb{N} \mid \text{任意の点$p$に対して，}F^k(p) = p \right\} \end{equation} を周期という．
+定義 定義（Arnoldの猫写像） 自然数$N$に対して，Arnoldの猫写像とは，次式で定まる写像$F\colon\mathbb{R}^2\to\mathbb{R}^2$を指す： \begin{equation} F\left(\begin{bmatrix} x \\ y \end{bmatrix}\right) = \begin{bmatrix} 1 &amp; 1 \\ 1 &amp; 2 \end{bmatrix}\begin{bmatrix} x \\ y \end{bmatrix} \quad \pmod N. \end{equation} また，冒頭に述べた周期も定義しておこう．
+定義 （周期） 自然数$N$とArnoldの猫写像$F$に対して， \begin{equation} T = \min\left\{ k\in\mathbb{N} \mid \text{任意の点$p$に対して，}F^k(p) = p \right\} \end{equation} を周期という．
 サメの絵で実験 次のような画像で実験してみよう．
 この画像に猫写像を何度か作用させるのだ．一旦はぐちゃぐちゃになるんだが，何度か作用させると元に戻る．このとき，作用させた回数が周期だ．まあ，とりあえずやってみよう．$15$回ほど反復させた図を下図に示した．
 画像サイズ$N$に対して周期がどのように変化するか調べてみよう．周期に関してはいくつか式が知られているが，ここではコンピュータの力を借りて愚直に調べる．画像サイズ$N$を変化させるごとに，猫写像を何度も作用させ，画像が一致するまで繰り返す．下図の横軸が$N$，縦軸が周期である．傾向として，$N$が大きくなるに従って周期も大きくなる．また，なんとなく規則性もありそう...

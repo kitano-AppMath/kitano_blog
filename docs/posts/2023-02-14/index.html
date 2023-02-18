@@ -4,8 +4,8 @@
 <meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta name='description' content='目次 定義とお絵描き 概要 定義 サメの絵で実験 定義とお絵描き Arnoldの猫写像を定義して，かる〜く実験する．画像さえあれば実験できるので，やってみてね．
 概要 Arnoldの猫写像とは，Arnoldが作った，2次元から2次元への&quot;chaotic&quot;な写像である．そして入力の画像にはなぜか猫のイラストが使われる．応用としては，カオスベースの画像暗号化技術などが挙げられる1．後ほど見るように，この写像には周期がある．暗号化など，セキュリティ分野への応用を考えれば，周期の研究に関心が向くのは自然だろう．どうやらDyson and Folk2の研究が代表的らしい．Bao and Yang1でも周期に関する公式が導出されている．Fibonacci数列との関連も興味深いが，この記事ではネット上の講義資料3を参考にいくつか実験してみよう．実験に使ったJuliaプログラムはこちら．
-定義 定義【Arnoldの猫写像】 自然数$N$に対して，Arnoldの猫写像とは，次式で定まる写像$F\colon\mathbb{R}^2\to\mathbb{R}^2$を指す： \begin{equation} F\left(\begin{bmatrix} x \\ y \end{bmatrix}\right) = \begin{bmatrix} 1 & 1 \\ 1 & 2 \end{bmatrix}\begin{bmatrix} x \\ y \end{bmatrix} \quad \pmod N. \end{equation} また，冒頭に述べた周期も定義しておこう．
-定義【周期】 自然数$N$とArnoldの猫写像$F$に対して， \begin{equation} T = \min\left\{ k\in\mathbb{N} \mid \text{任意の点$p$に対して，}F^k(p) = p \right\} \end{equation} を周期という．
+定義 定義（Arnoldの猫写像） 自然数$N$に対して，Arnoldの猫写像とは，次式で定まる写像$F\colon\mathbb{R}^2\to\mathbb{R}^2$を指す： \begin{equation} F\left(\begin{bmatrix} x \\ y \end{bmatrix}\right) = \begin{bmatrix} 1 & 1 \\ 1 & 2 \end{bmatrix}\begin{bmatrix} x \\ y \end{bmatrix} \quad \pmod N. \end{equation} また，冒頭に述べた周期も定義しておこう．
+定義 （周期） 自然数$N$とArnoldの猫写像$F$に対して， \begin{equation} T = \min\left\{ k\in\mathbb{N} \mid \text{任意の点$p$に対して，}F^k(p) = p \right\} \end{equation} を周期という．
 サメの絵で実験 次のような画像で実験してみよう．
 この画像に猫写像を何度か作用させるのだ．一旦はぐちゃぐちゃになるんだが，何度か作用させると元に戻る．このとき，作用させた回数が周期だ．まあ，とりあえずやってみよう．$15$回ほど反復させた図を下図に示した．
 画像サイズ$N$に対して周期がどのように変化するか調べてみよう．周期に関してはいくつか式が知られているが，ここではコンピュータの力を借りて愚直に調べる．画像サイズ$N$を変化させるごとに，猫写像を何度も作用させ，画像が一致するまで繰り返す．下図の横軸が$N$，縦軸が周期である．傾向として，$N$が大きくなるに従って周期も大きくなる．また，なんとなく規則性もありそう...
@@ -15,8 +15,8 @@ J. Bao and Q. Yang. Period of the discrete Arnold cat map and general cat map, N
 <meta property='og:title' content='Arnoldの猫写像 • 数値実験部屋'>
 <meta property='og:description' content='目次 定義とお絵描き 概要 定義 サメの絵で実験 定義とお絵描き Arnoldの猫写像を定義して，かる〜く実験する．画像さえあれば実験できるので，やってみてね．
 概要 Arnoldの猫写像とは，Arnoldが作った，2次元から2次元への&quot;chaotic&quot;な写像である．そして入力の画像にはなぜか猫のイラストが使われる．応用としては，カオスベースの画像暗号化技術などが挙げられる1．後ほど見るように，この写像には周期がある．暗号化など，セキュリティ分野への応用を考えれば，周期の研究に関心が向くのは自然だろう．どうやらDyson and Folk2の研究が代表的らしい．Bao and Yang1でも周期に関する公式が導出されている．Fibonacci数列との関連も興味深いが，この記事ではネット上の講義資料3を参考にいくつか実験してみよう．実験に使ったJuliaプログラムはこちら．
-定義 定義【Arnoldの猫写像】 自然数$N$に対して，Arnoldの猫写像とは，次式で定まる写像$F\colon\mathbb{R}^2\to\mathbb{R}^2$を指す： \begin{equation} F\left(\begin{bmatrix} x \\ y \end{bmatrix}\right) = \begin{bmatrix} 1 & 1 \\ 1 & 2 \end{bmatrix}\begin{bmatrix} x \\ y \end{bmatrix} \quad \pmod N. \end{equation} また，冒頭に述べた周期も定義しておこう．
-定義【周期】 自然数$N$とArnoldの猫写像$F$に対して， \begin{equation} T = \min\left\{ k\in\mathbb{N} \mid \text{任意の点$p$に対して，}F^k(p) = p \right\} \end{equation} を周期という．
+定義 定義（Arnoldの猫写像） 自然数$N$に対して，Arnoldの猫写像とは，次式で定まる写像$F\colon\mathbb{R}^2\to\mathbb{R}^2$を指す： \begin{equation} F\left(\begin{bmatrix} x \\ y \end{bmatrix}\right) = \begin{bmatrix} 1 & 1 \\ 1 & 2 \end{bmatrix}\begin{bmatrix} x \\ y \end{bmatrix} \quad \pmod N. \end{equation} また，冒頭に述べた周期も定義しておこう．
+定義 （周期） 自然数$N$とArnoldの猫写像$F$に対して， \begin{equation} T = \min\left\{ k\in\mathbb{N} \mid \text{任意の点$p$に対して，}F^k(p) = p \right\} \end{equation} を周期という．
 サメの絵で実験 次のような画像で実験してみよう．
 この画像に猫写像を何度か作用させるのだ．一旦はぐちゃぐちゃになるんだが，何度か作用させると元に戻る．このとき，作用させた回数が周期だ．まあ，とりあえずやってみよう．$15$回ほど反復させた図を下図に示した．
 画像サイズ$N$に対して周期がどのように変化するか調べてみよう．周期に関してはいくつか式が知られているが，ここではコンピュータの力を借りて愚直に調べる．画像サイズ$N$を変化させるごとに，猫写像を何度も作用させ，画像が一致するまで繰り返す．下図の横軸が$N$，縦軸が周期である．傾向として，$N$が大きくなるに従って周期も大きくなる．また，なんとなく規則性もありそう...
@@ -75,6 +75,22 @@ J. Bao and Q. Yang. Period of the discrete Arnold cat map and general cat map, N
   <div class='meta'>
     <span>
   <span class='screen-reader-text'>Posted on </span>
+  <time datetime='2023-02-18T00:21:07&#43;09:00'>2023/02/18</time>
+</span>
+
+  </div>
+  <header class='item-header'>
+    <h3 class='item-title'>
+      <a href='https://kitano-AppMath.github.io/kitano_blog/posts/2023-02-18/'>Gershgorinの定理</a>
+    </h3>
+  </header>
+</li>
+
+  
+    <li class='item'>
+  <div class='meta'>
+    <span>
+  <span class='screen-reader-text'>Posted on </span>
   <time datetime='2023-02-14T11:12:15&#43;09:00'>2023/02/14</time>
 </span>
 
@@ -118,7 +134,11 @@ J. Bao and Q. Yang. Period of the discrete Arnold cat map and general cat map, N
       </li><li>
         <a href='https://kitano-AppMath.github.io/kitano_blog/tags/%E3%82%AB%E3%82%AA%E3%82%B9/' style='font-size:1em'>カオス</a>
       </li><li>
+        <a href='https://kitano-AppMath.github.io/kitano_blog/tags/%E5%9B%BA%E6%9C%89%E5%80%A4/' style='font-size:1em'>固有値</a>
+      </li><li>
         <a href='https://kitano-AppMath.github.io/kitano_blog/tags/%E5%A4%89%E5%88%86%E6%8E%A8%E8%AB%96%E6%B3%95/' style='font-size:1em'>変分推論法</a>
+      </li><li>
+        <a href='https://kitano-AppMath.github.io/kitano_blog/tags/%E8%A1%8C%E5%88%97/' style='font-size:1em'>行列</a>
       </li></ul>
 </div>
 
@@ -260,7 +280,7 @@ One min read
 <p>　Arnoldの猫写像とは，Arnoldが作った，2次元から2次元への&quot;chaotic&quot;な写像である．そして入力の画像にはなぜか猫のイラストが使われる．応用としては，カオスベースの画像暗号化技術などが挙げられる<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>．後ほど見るように，この写像には<strong>周期</strong>がある．暗号化など，セキュリティ分野への応用を考えれば，周期の研究に関心が向くのは自然だろう．どうやらDyson and Folk<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>の研究が代表的らしい．Bao and Yang<sup id="fnref1:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>でも周期に関する公式が導出されている．Fibonacci数列との関連も興味深いが，この記事ではネット上の講義資料<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>を参考にいくつか実験してみよう．実験に使ったJuliaプログラムは<a href="https://github.com/kitano-AppMath/my-julia-works/blob/main/Arnold's-Cat-Map.ipynb">こちら</a>．</p>
 <h2 id="定義">定義</h2>
 <div>
-<b>定義</b>【Arnoldの猫写像】
+<b>定義</b>（Arnoldの猫写像）
 <p>　自然数$N$に対して，Arnoldの猫写像とは，次式で定まる写像$F\colon\mathbb{R}^2\to\mathbb{R}^2$を指す：
 \begin{equation}
     F\left(\begin{bmatrix} x \\ y \end{bmatrix}\right) = \begin{bmatrix}  1 & 1 \\ 1 & 2 \end{bmatrix}\begin{bmatrix} x \\ y \end{bmatrix} \quad \pmod N.  
@@ -269,7 +289,7 @@ One min read
 </div>
 <p>また，冒頭に述べた周期も定義しておこう．</p>
 <div>
-<b>定義</b>【周期】
+<b>定義</b> （周期）
 <p>　自然数$N$とArnoldの猫写像$F$に対して，
 \begin{equation}
     T = \min\left\{ k\in\mathbb{N} \mid \text{任意の点$p$に対して，}F^k(p) = p \right\}
@@ -296,7 +316,7 @@ One min read
 <p>F. J. Dyson and H. Folk.  Period of a Discrete Cat Mapping.  <em>The American Mathematical Monthly</em>, <strong>99</strong>(1992), pp. 603-614.&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:3">
-<p>G. Peterson, Arnold’s Cat ap.  <a href="https://mse.redwoods.edu/darnold/math45/laproj/Fall97/Gabe/Catmap.pdf">https://mse.redwoods.edu/darnold/math45/laproj/Fall97/Gabe/Catmap.pdf</a>, 1997.&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p>G. Peterson. Arnold’s CatMap.  <a href="https://mse.redwoods.edu/darnold/math45/laproj/Fall97/Gabe/Catmap.pdf">https://mse.redwoods.edu/darnold/math45/laproj/Fall97/Gabe/Catmap.pdf</a>, 1997.&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
 </div>
@@ -340,6 +360,21 @@ One min read
 </svg>
  Previous</span>
         <span class='screen-reader-text'>Previous post: </span>変分推論法</a>
+    </div><div class='next-entry sep-before'>
+      <a href='https://kitano-AppMath.github.io/kitano_blog/posts/2023-02-18/'>
+        <span class='screen-reader-text'>Next post: </span>Gershgorinの定理<span aria-hidden='true'>Next <svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="4" y1="12" x2="20" y2="12" />
+<polyline points="14 6 20 12 14 18" />
+</svg>
+</span>
+      </a>
     </div></div>
 </nav>
 
@@ -363,7 +398,7 @@ One min read
   MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"processEscapes":true}})
 </script>
 
-<script type='text/javascript' async src='//unpkg.com/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML'></script>
+<script type='text/javascript' async src='//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML'></script>
 
 </body>
 

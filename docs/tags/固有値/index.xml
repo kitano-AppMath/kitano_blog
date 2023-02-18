@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>固有値 on 数値実験部屋</title>
+    <link>https://kitano-AppMath.github.io/kitano_blog/tags/%E5%9B%BA%E6%9C%89%E5%80%A4/</link>
+    <description>Recent content in 固有値 on 数値実験部屋</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <lastBuildDate>Sat, 18 Feb 2023 00:21:07 +0900</lastBuildDate><atom:link href="https://kitano-AppMath.github.io/kitano_blog/tags/%E5%9B%BA%E6%9C%89%E5%80%A4/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Gershgorinの定理</title>
+      <link>https://kitano-AppMath.github.io/kitano_blog/posts/2023-02-18/</link>
+      <pubDate>Sat, 18 Feb 2023 00:21:07 +0900</pubDate>
+      
+      <guid>https://kitano-AppMath.github.io/kitano_blog/posts/2023-02-18/</guid>
+      <description>目次 定理の概要と例 概要 定理の内容 例１：単純な例 例２：相似変換 例３：狭義優対角行列 定理の概要と例 概要 Gershgorinの定理1は，行列の固有値のおおよその存在範囲を教えてくれる，ありがたい定理である．この定理だけで一冊の本2になるほどご利益がある．応用としては，数値解析をはじめ，グラフ理論などにも利用される．主張自体は数値解析の書籍3に書いてあることが多いが，ここではN. Highamのブログ記事4を参考にして，いくつか例を調べてみよう．実験に使ったJuliaプログラムはこちら．
+定理の内容 定理のstatementは以下の通りだ．
+定理（Gershgorinの定理） 複素正方行列$A=(a_{ij})\in\mathbb{C}^{n\times n}$と，その任意の固有値$\lambda$に対して，次式が成り立つ： \begin{equation} \lambda \in \bigcup_{i=1}^{n}\left\{ z\in\mathbb{C} \mid |z-a_{ii}| \leq \sum_{j\neq i}{|a_{ij}|} \right\}. \end{equation} つまり，任意の固有値の存在範囲が閉円盤の和集合に限定される ことを主張している．しかも存在範囲は行列の成分からすぐに分かる．ここで注意点だが，固有値を含む円盤が存在することを主張しているだけで，当然，固有値を含まない円盤が存在する可能性もある ．しかし，実は，上の定理の精密化5が存在して，固有値を含まない円盤が他の円盤と独立して存在する可能性は排除される．つまり，固有値を含まない円盤は，固有値を含む他の円盤と必ず繋がっている．まあ，とりあえず例を見てみよう．
+例１：単純な例 適当に行列を作って試してみよう．今回使った行列は \begin{equation} A_1 = \begin{bmatrix} 1&amp;0&amp;1+i&amp;1&amp;0\\ -1&amp;-1&amp;0&amp;-1&amp;0\\ 2&amp;1&amp;1&amp;-1&amp;0\\ 0&amp;2&amp;1&amp;1&amp;0\\ 2&amp;0&amp;1&amp;0&amp;1 \end{bmatrix}. \end{equation} 下図の赤い円が円盤の境界，黒点が固有値である．
+例２：相似変換 行列の相似変換により固有値は変わらないが，当然，円盤は変わる．Gershgorinの定理の観点から，対角化などの相似変換について考えてみよう．行列の対角化ができるならば，非対角成分が零になるから，円盤の半径も零になる．つまり，円盤は固有値の点に潰れるわけだ．Gershgorinの定理が固有値の存在範囲に関する情報を与えることを考えると，対角化のようなコストのかかる変換により固有値の存在範囲が絞られるのは自然なことである．同様に考えれば，仮に対角化まではできなくても，対角化に準ずる変換により固有値の存在範囲を絞る ことができると考えられる．ここでは上三角化を考えてみよう．
+次のような行列を考えよう： \begin{equation} A_2 = \begin{bmatrix} -1&amp;1&amp;0\\ 1&amp;3&amp;1\\ 1&amp;-3&amp;0 \end{bmatrix}. \end{equation} このとき，正則行列 \begin{equation} P_2 = \begin{bmatrix} 1&amp;0&amp;0\\ 0&amp;1&amp;0\\ -1&amp;-2&amp;1\end{bmatrix} \end{equation} により， \begin{equation} \Lambda_2 = P_2^{-1}A_2P_2 = \begin{bmatrix} -1&amp;1&amp;0\\0&amp;1&amp;1\\0&amp;0&amp;2\end{bmatrix} \end{equation} と上三角化できる．円盤が小さくなったか確認してみよう．左下図は元の行列$A_2$，右下図はその上三角化$\Lambda_2$である．確かに固有値の存在範囲がより狭くなっている．</description>
+    </item>
+    
+  </channel>
+</rss>
