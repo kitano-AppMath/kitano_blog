@@ -2,7 +2,7 @@
 <html lang='en' dir='auto'><head>
   <meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'>
-<meta name='description' content='目次 共役勾配法の概要 経緯と概要 共役勾配法を利用するメリット 共役勾配法のアルゴリズム ２つのストーリー 共役勾配法を構成する 解の特徴づけ 直交化 共役勾配法を俯瞰する Krylov部分空間法 直交化 共役勾配法の位置づけ 数値実験 例１：密行列の場合 例２：疎行列の場合 共役勾配法の概要 経緯と概要 共役勾配法（conjugate gradeint method）はHestenesとStiefel1によって提案された連立一次方程式の数値解法で，CG法とも呼ばれる．発表当初から大々的に報道されたようで，&ldquo;数値計算法の一解法が, これほど大々的に報道されたことは, 前にも後にも例がない&quot;との記述も2．1980年代にはKrylov部分空間法として再定式化されたことでも有名．ちなみにKrylov部分空間法は20世紀のトップ10アルゴリズムの１つである．この記事では，共役勾配法はどこから来たのか，何がすごいのか，そして，Krylov部分空間法とは何者か簡単に説明する．実験に使ったJuliaプログラムはこちら．
+<meta name='description' content='目次 共役勾配法の概要 経緯と概要 共役勾配法を利用するメリット 共役勾配法のアルゴリズム ２つのストーリー 共役勾配法を構成する 解の特徴づけ 直交化 共役勾配法を俯瞰する Krylov部分空間法 共役勾配法の位置づけ 数値実験 例１：密行列の場合 例２：疎行列の場合 共役勾配法の概要 経緯と概要 共役勾配法（conjugate gradeint method）はHestenesとStiefel1によって提案された連立一次方程式の数値解法で，CG法とも呼ばれる．発表当初から大々的に報道されたようで，&ldquo;数値計算法の一解法が, これほど大々的に報道されたことは, 前にも後にも例がない&quot;との記述も2．1980年代にはKrylov部分空間法として再定式化されたことでも有名．ちなみにKrylov部分空間法は20世紀のトップ10アルゴリズムの１つである．この記事では，共役勾配法はどこから来たのか，何がすごいのか，そして，Krylov部分空間法とは何者か簡単に説明する．実験に使ったJuliaプログラムはこちら．
 共役勾配法を利用するメリット 共役勾配法はなぜこれほどまで注目されたのだろうか．この解法の特に優れた点を以下に挙げてみよう．
 原理的には ，有限回の反復で厳密解に収束する 行列の全成分を知らなくても, 行列-ベクトル積が分かれば アルゴリズム自体は動く fill inを回避できる（＝行列の疎性が壊れない） １点目に関して補足すると，理論上は$n\times n$の係数行列に対して$n$回の反復で収束するが，実際の計算では丸め誤差の影響で，収束により多くの反復を要する ことがある．２点目に関しては，極論，係数行列の中身が分からなくても良い．とにかくベクトル行列式を計算する関数さえ定義できれば良いのだ．３点目に関して，fill inとは，係数行列の零成分が反復の途中で非零になる現象を指す．非零になった分メモリを確保する必要があり，余計にコストがかかるため，fill inは嬉しくない現象である．まあとにかく，共役勾配法を使わない手はない！（Juliaのデフォルトのソルバーは優秀なので自分でコードを組むことは少ないかもしれない．なお，共役勾配法を含むKrylob部分空間法を基にした数値解法を実装したパッケージは充実している模様．）
 共役勾配法のアルゴリズム 詳細に入る前に，共役勾配法のアルゴリズムを示しておこう．
@@ -12,7 +12,7 @@ Initialize $x_0$, and set $r_0=b-Ax_0$ and $p_0=r_0$. for $k=0, 1, \dots$ do
 <meta name='theme-color' content='#ffcd00'>
 
 <meta property='og:title' content='共役勾配法 • 数値実験部屋'>
-<meta property='og:description' content='目次 共役勾配法の概要 経緯と概要 共役勾配法を利用するメリット 共役勾配法のアルゴリズム ２つのストーリー 共役勾配法を構成する 解の特徴づけ 直交化 共役勾配法を俯瞰する Krylov部分空間法 直交化 共役勾配法の位置づけ 数値実験 例１：密行列の場合 例２：疎行列の場合 共役勾配法の概要 経緯と概要 共役勾配法（conjugate gradeint method）はHestenesとStiefel1によって提案された連立一次方程式の数値解法で，CG法とも呼ばれる．発表当初から大々的に報道されたようで，&ldquo;数値計算法の一解法が, これほど大々的に報道されたことは, 前にも後にも例がない&quot;との記述も2．1980年代にはKrylov部分空間法として再定式化されたことでも有名．ちなみにKrylov部分空間法は20世紀のトップ10アルゴリズムの１つである．この記事では，共役勾配法はどこから来たのか，何がすごいのか，そして，Krylov部分空間法とは何者か簡単に説明する．実験に使ったJuliaプログラムはこちら．
+<meta property='og:description' content='目次 共役勾配法の概要 経緯と概要 共役勾配法を利用するメリット 共役勾配法のアルゴリズム ２つのストーリー 共役勾配法を構成する 解の特徴づけ 直交化 共役勾配法を俯瞰する Krylov部分空間法 共役勾配法の位置づけ 数値実験 例１：密行列の場合 例２：疎行列の場合 共役勾配法の概要 経緯と概要 共役勾配法（conjugate gradeint method）はHestenesとStiefel1によって提案された連立一次方程式の数値解法で，CG法とも呼ばれる．発表当初から大々的に報道されたようで，&ldquo;数値計算法の一解法が, これほど大々的に報道されたことは, 前にも後にも例がない&quot;との記述も2．1980年代にはKrylov部分空間法として再定式化されたことでも有名．ちなみにKrylov部分空間法は20世紀のトップ10アルゴリズムの１つである．この記事では，共役勾配法はどこから来たのか，何がすごいのか，そして，Krylov部分空間法とは何者か簡単に説明する．実験に使ったJuliaプログラムはこちら．
 共役勾配法を利用するメリット 共役勾配法はなぜこれほどまで注目されたのだろうか．この解法の特に優れた点を以下に挙げてみよう．
 原理的には ，有限回の反復で厳密解に収束する 行列の全成分を知らなくても, 行列-ベクトル積が分かれば アルゴリズム自体は動く fill inを回避できる（＝行列の疎性が壊れない） １点目に関して補足すると，理論上は$n\times n$の係数行列に対して$n$回の反復で収束するが，実際の計算では丸め誤差の影響で，収束により多くの反復を要する ことがある．２点目に関しては，極論，係数行列の中身が分からなくても良い．とにかくベクトル行列式を計算する関数さえ定義できれば良いのだ．３点目に関して，fill inとは，係数行列の零成分が反復の途中で非零になる現象を指す．非零になった分メモリを確保する必要があり，余計にコストがかかるため，fill inは嬉しくない現象である．まあとにかく，共役勾配法を使わない手はない！（Juliaのデフォルトのソルバーは優秀なので自分でコードを組むことは少ないかもしれない．なお，共役勾配法を含むKrylob部分空間法を基にした数値解法を実装したパッケージは充実している模様．）
 共役勾配法のアルゴリズム 詳細に入る前に，共役勾配法のアルゴリズムを示しておこう．
@@ -301,7 +301,6 @@ Initialize $x_0$, and set $r_0=b-Ax_0$ and $p_0=r_0$. for $k=0, 1, \dots$ do
     <li><a href="#共役勾配法を俯瞰する">共役勾配法を俯瞰する</a>
       <ul>
         <li><a href="#krylov部分空間法">Krylov部分空間法</a></li>
-        <li><a href="#直交化-1">直交化</a></li>
         <li><a href="#共役勾配法の位置づけ">共役勾配法の位置づけ</a></li>
       </ul>
     </li>
@@ -345,7 +344,7 @@ Initialize $x_0$, and set $r_0=b-Ax_0$ and $p_0=r_0$. for $k=0, 1, \dots$ do
 <b>end</b></p>
 </div>
 <h2 id="２つのストーリー">２つのストーリー</h2>
-<p>　この記事では，数値解析の書籍<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup><sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup><sup id="fnref:5"><a href="#fn:5" class="footnote-ref" role="doc-noteref">5</a></sup><sup id="fnref:6"><a href="#fn:6" class="footnote-ref" role="doc-noteref">6</a></sup>を参考に，共役勾配法を２通りに説明する．一つは最適化問題から出発してアルゴリズムを構成していくパターン，２つ目はKrylov部分空間法の観点から共役勾配法を俯瞰するパターンである．両者は仮定がやや異なり，後者の方がより一般の場合に適用できる．</p>
+<p>　この記事では，数値解析の書籍<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup><sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup><sup id="fnref:5"><a href="#fn:5" class="footnote-ref" role="doc-noteref">5</a></sup><sup id="fnref:6"><a href="#fn:6" class="footnote-ref" role="doc-noteref">6</a></sup>を参考に，共役勾配法を２通りに説明する．一つ目は最適化問題から出発してアルゴリズムを構成していくストーリー，二つ目はKrylov部分空間法の観点から共役勾配法を俯瞰するストーリーである．両者は仮定がやや異なり，後者の方がより一般の場合に適用できる．</p>
 <h1 id="共役勾配法を構成する">共役勾配法を構成する</h1>
 <h2 id="解の特徴づけ">解の特徴づけ</h2>
 <div>
@@ -353,12 +352,13 @@ Initialize $x_0$, and set $r_0=b-Ax_0$ and $p_0=r_0$. for $k=0, 1, \dots$ do
 \begin{equation}
     \Phi (\xi) = \frac{1}{2}(\xi-x)^{\top}A(\xi-x).  
 \end{equation}
-この関数は解$x$で唯一の最小値をとることに着目し，ここでは<b>関数の最小化アルゴリズムから共役勾配法を構成</b>してみよう．</p>
+この関数は解$x$で唯一の最小値をとることに着目し，ここでは<span style="background: linear-gradient(transparent 50%, #fafba4 30%);">関数の最小化アルゴリズムから共役勾配法を構成</span>
+してみよう．</p>
 </div>
 <div>
-<p>　最小化アルゴリズムといえば，最急降下法だろう．現在の解の候補$x_k$における目的関数の勾配を計算すると，
+<p>　最小化アルゴリズムといえば，<b>最急降下法</b>だろう．現在の解の候補$x_k$における目的関数の勾配を計算すると，
 \begin{equation}
-    \nabla \Phi (\xi_k) = Ax_k - b = -r_k
+    \nabla \Phi (x_k) = Ax_k - b = -r_k
 \end{equation}
 である．ただし，$r_k=b-Ax_k$は残差と呼ばれる．以上から，次の更新式が候補となる：
 \begin{equation}
@@ -369,9 +369,9 @@ x_{k+1} = x_k + \alpha_k r_k.
 <h2 id="直交化">直交化</h2>
 <p>　残差ベクトルを直交化して更新方向のベクトルを構成しよう．本節の詳しい証明は専門書を参照されたい<sup id="fnref1:6"><a href="#fn:6" class="footnote-ref" role="doc-noteref">6</a></sup>．</p>
 <div>
-<p>　Gram-Schmidtの正規直交化により，$p_0=r_0$および
+<p>　<b>Gram-Schmidtの正規直交化</b>により，$p_0=r_0$および
 \begin{equation}
-    p_{k+1} = r_{k+1} - \sum_{j=1}^{k}\frac{r_{k+1}^\top Ap_j}{p_j^{\top} Ap_j}p_j, \quad (k=0, 1, \dots)
+    p_{k+1} = r_{k+1} - \sum_{j=0}^{k}\frac{r_{k+1}^\top Ap_j}{p_j^{\top} Ap_j}p_j, \quad (k=0, 1, \dots)
 \end{equation}
 と定義する．このとき，右辺第２項の和の大部分が消え
 \begin{equation}
@@ -381,9 +381,17 @@ x_{k+1} = x_k + \alpha_k r_k.
 \begin{equation}
     x_{k+1} = x_k + \alpha_k p_k
 \end{equation}
-と更新すれば，共役勾配法のアルゴリズムが得られる．</p>
-<p>　さて，こうして得られたアルゴリズムには次のようなメリットがある．残差ベクトル同士は標準内積に関して直交する．したがって，最初の$n$反復で得られたベクトル同士は直交系となり，それ以降の残差ベクトルはゼロベクトルとなる．すなわち，$n$反復で<b>厳密解に到達する</b>．しかし，実際には丸め誤差などの影響でより多くの反復を要することが多い．</p>
-</div>
+と更新すれば，共役勾配法における解の更新式が得られる．最後に，ステップサイズ$\alpha_k$を定める必要がある．これは
+\begin{equation}
+    \alpha_k = \underset{\alpha > 0}{\mathrm{argmin}}\ \Phi (x_k + \alpha p_k)
+\end{equation}
+とするのが自然だろう．これを解くと
+\begin{equation}
+    \alpha_k = \frac{r_{k}^\top p_k}{p_k^{\top} Ap_k}
+\end{equation}
+が得られる．以上で，共役勾配法のアルゴリズムが導出できた．</p></div>
+<p>　さて，こうして得られたアルゴリズムには次のようなメリットがある．残差ベクトル同士は標準内積に関して直交する．したがって，最初の$n$反復で得られたベクトル同士は直交系となり，それ以降の残差ベクトルはゼロベクトルとなる．すなわち，$n$反復で<span style="background: linear-gradient(transparent 50%, #fafba4 30%);">厳密解に到達する</span>
+．しかし，実際には丸め誤差などの影響でより多くの反復を要することが多い．</p>
 <h1 id="共役勾配法を俯瞰する">共役勾配法を俯瞰する</h1>
 <p>　本節では，係数行列$A$が<strong>対称行列</strong>であるとする．</p>
 <h2 id="krylov部分空間法">Krylov部分空間法</h2>
@@ -393,7 +401,7 @@ x_{k+1} = x_k + \alpha_k r_k.
 \begin{equation}
     K_m(A, v) = \mathrm{span} \left\{v, Av, A^2v, \dots, A^{m-1}v \right\}
 \end{equation}
-を行列$A$とベクトル$v$に関する$m$次のKrylov部分空間という．</p>  
+を行列$A$とベクトル$v$に関する$m$次の<b>Krylov部分空間</b>という．</p>  
 </div>
 <p>Krylov部分空間を次のように用いた解法を一般にKrylov部分空間法という．</p>
 <div>  
@@ -402,17 +410,40 @@ x_{k+1} = x_k + \alpha_k r_k.
 \begin{equation}
     x_k = x_0 + z_k , \quad z_k\in K_k(A, r_0)
 \end{equation}
-のように近似解列を構成する方法を，Krylov部分空間法という．</p>
+のように近似解列を構成する方法を，<b>Krylov部分空間法</b>という．</p>
+<p>　Krylov部分空間は次数が上がるごとに大きくなる．すなわち，$K_k(A, r_0) \subset K_{k+1}(A, r_0)$が成り立つため，反復するごとに近似解の範囲が広がる．</p>
 </div>
-<h2 id="直交化-1">直交化</h2>
 <h2 id="共役勾配法の位置づけ">共役勾配法の位置づけ</h2>
+<p>　共役勾配法は，Krylov部分空間に対して
+\begin{equation}
+r_k \perp K_k(A, r_0), \quad r_k = b - Ax_k
+\end{equation}
+が成り立つような特別な場合である．この条件を満たす残差$r_k$は，<strong>Lanczos過程</strong><sup id="fnref1:5"><a href="#fn:5" class="footnote-ref" role="doc-noteref">5</a></sup>により作り出すことができる．細かい証明は数値解析の教科書<sup id="fnref1:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup><sup id="fnref2:5"><a href="#fn:5" class="footnote-ref" role="doc-noteref">5</a></sup>を参照されたい．</p>
 <h1 id="数値実験">数値実験</h1>
 <p>　本節では，共役勾配法の数値実験例を２つほど紹介する．</p>
 <h2 id="例１密行列の場合">例１：密行列の場合</h2>
-<img src="https://kitano-AppMath.github.io/kitano_blog/2023-02-19/fig1.png" alt="実験結果" /> 
-<p>　係数行列</p>
-<img src="https://kitano-AppMath.github.io/kitano_blog/2023-02-19/fig2.png" alt="実験結果" /> 
+<div>
+<p>　係数行列$A\in\mathbb{R}^{n\times n}$を，正規乱数を成分とする正方行列$M$を用いて$A=M^\top M$と定義する．ただし，$n=2000$とする．下図に，共役勾配法の反復中における$\frac{\|r_k\|}{\|b\|}$の変化を示した．</p>
+</div>
+<p><img src="https://kitano-AppMath.github.io/kitano_blog/2023-02-19/fig1.png" alt="実験1"></p>
+<p>　実行時間は$2.74$，真の解との相対誤差は$2.50\times 10^{-3}$であった．比較として実装したLU分解では，実行時間は$18.86$，真の解との相対誤差は$1.75\times 10^{-10}$であった．</p>
 <h2 id="例２疎行列の場合">例２：疎行列の場合</h2>
+<div>
+<p>　係数行列$A\in\mathbb{n\times n}$を次のような疎行列とする：
+\begin{equation}
+A = \begin{bmatrix}
+  -1 & 2 & 1 & 0 & \cdots & 0 \\
+  2 & -1 & 2 & 1 & \cdots & 0 \\
+  1 & 2 & -1 & 2 & \cdots & 0 \\
+  0 & 1 & 2 & -1 & \cdots & 0\\
+  \vdots & \vdots & \vdots & \vdots & \vdots & \vdots\\
+  0 & 0 & 0 & 1 & 2  & -1   
+\end{bmatrix}.  
+\end{equation}
+ただし，$n=2000$とする．下図に，共役勾配法の反復中における$\frac{\|r_k\|}{\|b\|}$の変化を示した．</p>
+</div>
+<p><img src="https://kitano-AppMath.github.io/kitano_blog/2023-02-19/fig2.png" alt="実験2"></p>
+<p>　実行時間は$0.16$，真の解との相対誤差は$1.00 \times 10^{-8}$であった．比較として実装したLU分解では，実行時間は$19.07$，真の解との相対誤差は$4.31\times 10^{-15}$であった．共役勾配法が疎行列向きであることが分かるだろう．</p>
 <div class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
@@ -426,10 +457,10 @@ x_{k+1} = x_k + \alpha_k r_k.
 <p>R. Barrett, T. F. Chan, J. Donato, M. Berry and J. Demmel. 反復法Templates. 朝倉書店, 1996.&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:4">
-<p>藤野清次 and 張紹良. 反復法の数理. 朝倉書店, 1996.&#160;<a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p>藤野清次 and 張紹良. 反復法の数理. 朝倉書店, 1996.&#160;<a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a>&#160;<a href="#fnref1:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:5">
-<p>森正武. 数値解析 第２版. 共立出版, 2002.&#160;<a href="#fnref:5" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p>森正武. 数値解析 第２版. 共立出版, 2002.&#160;<a href="#fnref:5" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a>&#160;<a href="#fnref1:5" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a>&#160;<a href="#fnref2:5" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:6">
 <p>杉原正顕 and 室田一雄. 線形計算の数理. 岩波書店, 2016.&#160;<a href="#fnref:6" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a>&#160;<a href="#fnref1:6" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
