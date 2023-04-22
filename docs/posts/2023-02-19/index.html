@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang='en' dir='auto'><head>
+  <meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta name='description' content='目次 共役勾配法の概要 経緯と概要 共役勾配法を利用するメリット 共役勾配法のアルゴリズム ２つのストーリー 共役勾配法を構成する 解の特徴づけ 直交化 共役勾配法を俯瞰する Krylov部分空間法 直交化 共役勾配法の位置づけ 数値実験 例１：密行列の場合 例２：疎行列の場合 共役勾配法の概要 経緯と概要 共役勾配法（conjugate gradeint method）はHestenesとStiefel1によって提案された連立一次方程式の数値解法で，CG法とも呼ばれる．発表当初から大々的に報道されたようで，&ldquo;数値計算法の一解法が, これほど大々的に報道されたことは, 前にも後にも例がない&quot;との記述も2．1980年代にはKrylov部分空間法として再定式化されたことでも有名．ちなみにKrylov部分空間法は20世紀のトップ10アルゴリズムの１つである．この記事では，共役勾配法はどこから来たのか，何がすごいのか，そして，Krylov部分空間法とは何者か簡単に説明する．実験に使ったJuliaプログラムはこちら．
+共役勾配法を利用するメリット 共役勾配法はなぜこれほどまで注目されたのだろうか．この解法の特に優れた点を以下に挙げてみよう．
+原理的には ，有限回の反復で厳密解に収束する 行列の全成分を知らなくても, 行列-ベクトル積が分かれば アルゴリズム自体は動く fill inを回避できる（＝行列の疎性が壊れない） １点目に関して補足すると，理論上は$n\times n$の係数行列に対して$n$回の反復で収束するが，実際の計算では丸め誤差の影響で，収束により多くの反復を要する ことがある．２点目に関しては，極論，係数行列の中身が分からなくても良い．とにかくベクトル行列式を計算する関数さえ定義できれば良いのだ．３点目に関して，fill inとは，係数行列の零成分が反復の途中で非零になる現象を指す．非零になった分メモリを確保する必要があり，余計にコストがかかるため，fill inは嬉しくない現象である．まあとにかく，共役勾配法を使わない手はない！（Juliaのデフォルトのソルバーは優秀なので自分でコードを組むことは少ないかもしれない．なお，共役勾配法を含むKrylob部分空間法を基にした数値解法を実装したパッケージは充実している模様．）
+共役勾配法のアルゴリズム 詳細に入る前に，共役勾配法のアルゴリズムを示しておこう．
+定義（共役勾配法） 共役勾配法とは，$n$次正方行列$A$，$n$次元ベクトル$b$に対して，連立一次方程式$Ax=b$の近似解列$\left\{ x_n \right\}_{n=0}^{\infty}$を次のように生成する方法を指す．
+Initialize $x_0$, and set $r_0=b-Ax_0$ and $p_0=r_0$. for $k=0, 1, \dots$ do
+&emsp;Update $\alpha_k = \frac{r_{k}^\top p_k}{p_k^{\top} Ap_k}$. &emsp;Update $x_{k&#43;1} = x_k &#43; \alpha_k p_k$. &emsp;Update $r_{k&#43;1} = b - Ax_{k&#43;1}$.'>
+<meta name='theme-color' content='#ffcd00'>
+
+<meta property='og:title' content='共役勾配法 • 数値実験部屋'>
+<meta property='og:description' content='目次 共役勾配法の概要 経緯と概要 共役勾配法を利用するメリット 共役勾配法のアルゴリズム ２つのストーリー 共役勾配法を構成する 解の特徴づけ 直交化 共役勾配法を俯瞰する Krylov部分空間法 直交化 共役勾配法の位置づけ 数値実験 例１：密行列の場合 例２：疎行列の場合 共役勾配法の概要 経緯と概要 共役勾配法（conjugate gradeint method）はHestenesとStiefel1によって提案された連立一次方程式の数値解法で，CG法とも呼ばれる．発表当初から大々的に報道されたようで，&ldquo;数値計算法の一解法が, これほど大々的に報道されたことは, 前にも後にも例がない&quot;との記述も2．1980年代にはKrylov部分空間法として再定式化されたことでも有名．ちなみにKrylov部分空間法は20世紀のトップ10アルゴリズムの１つである．この記事では，共役勾配法はどこから来たのか，何がすごいのか，そして，Krylov部分空間法とは何者か簡単に説明する．実験に使ったJuliaプログラムはこちら．
+共役勾配法を利用するメリット 共役勾配法はなぜこれほどまで注目されたのだろうか．この解法の特に優れた点を以下に挙げてみよう．
+原理的には ，有限回の反復で厳密解に収束する 行列の全成分を知らなくても, 行列-ベクトル積が分かれば アルゴリズム自体は動く fill inを回避できる（＝行列の疎性が壊れない） １点目に関して補足すると，理論上は$n\times n$の係数行列に対して$n$回の反復で収束するが，実際の計算では丸め誤差の影響で，収束により多くの反復を要する ことがある．２点目に関しては，極論，係数行列の中身が分からなくても良い．とにかくベクトル行列式を計算する関数さえ定義できれば良いのだ．３点目に関して，fill inとは，係数行列の零成分が反復の途中で非零になる現象を指す．非零になった分メモリを確保する必要があり，余計にコストがかかるため，fill inは嬉しくない現象である．まあとにかく，共役勾配法を使わない手はない！（Juliaのデフォルトのソルバーは優秀なので自分でコードを組むことは少ないかもしれない．なお，共役勾配法を含むKrylob部分空間法を基にした数値解法を実装したパッケージは充実している模様．）
+共役勾配法のアルゴリズム 詳細に入る前に，共役勾配法のアルゴリズムを示しておこう．
+定義（共役勾配法） 共役勾配法とは，$n$次正方行列$A$，$n$次元ベクトル$b$に対して，連立一次方程式$Ax=b$の近似解列$\left\{ x_n \right\}_{n=0}^{\infty}$を次のように生成する方法を指す．
+Initialize $x_0$, and set $r_0=b-Ax_0$ and $p_0=r_0$. for $k=0, 1, \dots$ do
+&emsp;Update $\alpha_k = \frac{r_{k}^\top p_k}{p_k^{\top} Ap_k}$. &emsp;Update $x_{k&#43;1} = x_k &#43; \alpha_k p_k$. &emsp;Update $r_{k&#43;1} = b - Ax_{k&#43;1}$.'>
+<meta property='og:url' content='https://kitano-AppMath.github.io/kitano_blog/posts/2023-02-19/'>
+<meta property='og:site_name' content='数値実験部屋'>
+<meta property='og:type' content='article'><meta property='article:section' content='posts'><meta property='article:tag' content='Krylov部分空間法'><meta property='article:tag' content='数値解法'><meta property='article:tag' content='連立一次方程式'><meta property='article:tag' content='共役勾配法'><meta property='article:published_time' content='2023-02-19T23:38:01&#43;09:00'/><meta property='article:modified_time' content='2023-02-19T23:38:01&#43;09:00'/><meta name='twitter:card' content='summary'>
+
+<meta name="generator" content="Hugo 0.106.0">
+
+  <title>共役勾配法 • 数値実験部屋</title>
+  <link rel='canonical' href='https://kitano-AppMath.github.io/kitano_blog/posts/2023-02-19/'>
+  
+  
+  <link rel='icon' href='https://kitano-AppMath.github.io/kitano_blog/shark.png'>
+<link rel='stylesheet' href='https://kitano-AppMath.github.io/kitano_blog/assets/css/main.ab98e12b.css'><link rel='stylesheet' href='https://kitano-AppMath.github.io/kitano_blog/css/custom.css'><style>
+:root{--color-accent:#ffcd00;}
+</style>
+
+  
+
+</head>
+<body class='page type-posts has-sidebar'>
+
+  <div class='site'><div id='sidebar' class='sidebar'>
+  <a class='screen-reader-text' href='#main-menu'>Skip to Main Menu</a>
+
+  <div class='container'><section class='widget widget-about sep-after'>
+  <header>
+    
+    <div class='logo'>
+      <a href='https://kitano-AppMath.github.io/kitano_blog/'>
+        <img src='https://kitano-AppMath.github.io/kitano_blog/shark.png'>
+      </a>
+    </div>
+    
+    <h2 class='title site-title '>
+      <a href='https://kitano-AppMath.github.io/kitano_blog/'>
+      数値実験部屋
+      </a>
+    </h2>
+    <div class='desc'>
+    
+    </div>
+  </header>
+
+</section>
+<section class='widget widget-recent_posts sep-after'>
+  <header>
+    <h4 class='title widget-title'>最新記事</h4>
+  </header>
+
+  <ul class='list'>
+  
+    <li class='item'>
+  <div class='meta'>
+    <span>
+  <span class='screen-reader-text'>Posted on </span>
+  <time datetime='2023-02-19T23:38:01&#43;09:00'>2023/02/19</time>
+</span>
+
+  </div>
+  <header class='item-header'>
+    <h3 class='item-title'>
+      <a href='https://kitano-AppMath.github.io/kitano_blog/posts/2023-02-19/'>共役勾配法</a>
+    </h3>
+  </header>
+</li>
+
+  
+    <li class='item'>
+  <div class='meta'>
+    <span>
+  <span class='screen-reader-text'>Posted on </span>
+  <time datetime='2023-02-18T00:21:07&#43;09:00'>2023/02/18</time>
+</span>
+
+  </div>
+  <header class='item-header'>
+    <h3 class='item-title'>
+      <a href='https://kitano-AppMath.github.io/kitano_blog/posts/2023-02-18/'>Gershgorinの定理</a>
+    </h3>
+  </header>
+</li>
+
+  
+    <li class='item'>
+  <div class='meta'>
+    <span>
+  <span class='screen-reader-text'>Posted on </span>
+  <time datetime='2023-02-14T11:12:15&#43;09:00'>2023/02/14</time>
+</span>
+
+  </div>
+  <header class='item-header'>
+    <h3 class='item-title'>
+      <a href='https://kitano-AppMath.github.io/kitano_blog/posts/2023-02-14/'>Arnoldの猫写像</a>
+    </h3>
+  </header>
+</li>
+
+  
+    <li class='item'>
+  <div class='meta'>
+    <span>
+  <span class='screen-reader-text'>Posted on </span>
+  <time datetime='2023-02-10T16:44:19&#43;09:00'>2023/02/10</time>
+</span>
+
+  </div>
+  <header class='item-header'>
+    <h3 class='item-title'>
+      <a href='https://kitano-AppMath.github.io/kitano_blog/posts/2023-02-11/'>変分推論法</a>
+    </h3>
+  </header>
+</li>
+
+  
+  </ul>
+</section>
+<section class='widget widget-taxonomy_cloud sep-after'>
+  <header>
+    <h4 class='title widget-title'>タグ</h4>
+  </header>
+
+  <div class='container list-container'>
+  <ul class='list taxonomy-cloud'><li>
+        <a href='https://kitano-AppMath.github.io/kitano_blog/tags/bayes/' style='font-size:1em'>Bayes</a>
+      </li><li>
+        <a href='https://kitano-AppMath.github.io/kitano_blog/tags/julia%E8%A8%80%E8%AA%9E/' style='font-size:2em'>Julia言語</a>
+      </li><li>
+        <a href='https://kitano-AppMath.github.io/kitano_blog/tags/krylov%E9%83%A8%E5%88%86%E7%A9%BA%E9%96%93%E6%B3%95/' style='font-size:1em'>Krylov部分空間法</a>
+      </li><li>
+        <a href='https://kitano-AppMath.github.io/kitano_blog/tags/%E3%82%AB%E3%82%AA%E3%82%B9/' style='font-size:1em'>カオス</a>
+      </li><li>
+        <a href='https://kitano-AppMath.github.io/kitano_blog/tags/%E5%85%B1%E5%BD%B9%E5%8B%BE%E9%85%8D%E6%B3%95/' style='font-size:1em'>共役勾配法</a>
+      </li><li>
+        <a href='https://kitano-AppMath.github.io/kitano_blog/tags/%E5%9B%BA%E6%9C%89%E5%80%A4/' style='font-size:1em'>固有値</a>
+      </li><li>
+        <a href='https://kitano-AppMath.github.io/kitano_blog/tags/%E5%A4%89%E5%88%86%E6%8E%A8%E8%AB%96%E6%B3%95/' style='font-size:1em'>変分推論法</a>
+      </li><li>
+        <a href='https://kitano-AppMath.github.io/kitano_blog/tags/%E6%95%B0%E5%80%A4%E8%A7%A3%E6%B3%95/' style='font-size:1em'>数値解法</a>
+      </li><li>
+        <a href='https://kitano-AppMath.github.io/kitano_blog/tags/%E8%A1%8C%E5%88%97/' style='font-size:1em'>行列</a>
+      </li><li>
+        <a href='https://kitano-AppMath.github.io/kitano_blog/tags/%E9%80%A3%E7%AB%8B%E4%B8%80%E6%AC%A1%E6%96%B9%E7%A8%8B%E5%BC%8F/' style='font-size:1em'>連立一次方程式</a>
+      </li></ul>
+</div>
+
+
+</section>
+</div>
+
+  <div class='sidebar-overlay'></div>
+</div><div class='main'><nav id='main-menu' class='menu main-menu' aria-label='Main Menu'>
+  <div class='container'>
+    <a class='screen-reader-text' href='#content'>Skip to Content</a>
+
+<button id='sidebar-toggler' class='sidebar-toggler' aria-controls='sidebar'>
+  <span class='screen-reader-text'>Toggle Sidebar</span>
+  <span class='open'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="3" y1="12" x2="21" y2="12" />
+<line x1="3" y1="6" x2="21" y2="6" />
+<line x1="3" y1="18" x2="21" y2="18" />
+</svg>
+</span>
+  <span class='close'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="18" y1="6" x2="6" y2="18" />
+<line x1="6" y1="6" x2="18" y2="18" />
+</svg>
+</span>
+</button>
+    <ul><li class='item'>
+        <a href='https://kitano-AppMath.github.io/kitano_blog/'>ホーム</a>
+      </li><li class='item'>
+        <a href='https://kitano-AppMath.github.io/kitano_blog/posts/'>記事一覧</a>
+      </li><li class='item'>
+        <a href='https://twitter.com/kitano_blog'>Twitter</a>
+      </li><li class='item'>
+        <a href='https://github.com/kitano-AppMath'>GitHub</a>
+      </li><li class='item'>
+        <a href='https://kitano-AppMath.github.io/kitano_blog/aboutme'>中の人</a>
+      </li></ul>
+  </div>
+</nav><div class='header-widgets'>
+        <div class='container'></div>
+      </div>
+
+      <header id='header' class='header site-header'>
+        <div class='container sep-after'>
+          <div class='header-info'><p class='site-title title'>数値実験部屋</p><p class='desc site-desc'></p>
+          </div>
+        </div>
+      </header>
+
+      <main id='content'>
+
+
+<article lang='en' class='entry'>
+  <header class='header entry-header'>
+  <div class='container sep-after'>
+    <div class='header-info'>
+      <h1 class='title'>共役勾配法</h1>
+      
+
+    </div>
+    <div class='entry-meta'>
+  <span class='posted-on'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+<line x1="16" y1="2" x2="16" y2="6" />
+<line x1="8" y1="2" x2="8" y2="6" />
+<line x1="3" y1="10" x2="21" y2="10" />
+</svg>
+<span class='screen-reader-text'>Posted on </span>
+  <time class='entry-date' datetime='2023-02-19T23:38:01&#43;09:00'>2023/02/ 19</time>
+</span>
+
+  
+  
+<span class='reading-time'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><circle cx="12" cy="12" r="10" />
+<polyline points="12 6 12 12 15 15" />
+</svg>
+2 mins read
+</span>
+
+
+</div>
+
+
+  </div>
+</header>
+
+  
+  
+
+  <div class='container entry-content'>
+  <div>
+    <h2>目次</h2>
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#共役勾配法の概要">共役勾配法の概要</a>
+      <ul>
+        <li><a href="#経緯と概要">経緯と概要</a></li>
+        <li><a href="#共役勾配法を利用するメリット">共役勾配法を利用するメリット</a></li>
+        <li><a href="#共役勾配法のアルゴリズム">共役勾配法のアルゴリズム</a></li>
+        <li><a href="#２つのストーリー">２つのストーリー</a></li>
+      </ul>
+    </li>
+    <li><a href="#共役勾配法を構成する">共役勾配法を構成する</a>
+      <ul>
+        <li><a href="#解の特徴づけ">解の特徴づけ</a></li>
+        <li><a href="#直交化">直交化</a></li>
+      </ul>
+    </li>
+    <li><a href="#共役勾配法を俯瞰する">共役勾配法を俯瞰する</a>
+      <ul>
+        <li><a href="#krylov部分空間法">Krylov部分空間法</a></li>
+        <li><a href="#直交化-1">直交化</a></li>
+        <li><a href="#共役勾配法の位置づけ">共役勾配法の位置づけ</a></li>
+      </ul>
+    </li>
+    <li><a href="#数値実験">数値実験</a>
+      <ul>
+        <li><a href="#例１密行列の場合">例１：密行列の場合</a></li>
+        <li><a href="#例２疎行列の場合">例２：疎行列の場合</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+</div>
+
+<hr>
+<h1 id="共役勾配法の概要">共役勾配法の概要</h1>
+<h2 id="経緯と概要">経緯と概要</h2>
+<p>　<strong>共役勾配法</strong>（conjugate gradeint method）はHestenesとStiefel<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>によって提案された連立一次方程式の数値解法で，<strong>CG法</strong>とも呼ばれる．発表当初から大々的に報道されたようで，&ldquo;数値計算法の一解法が, これほど大々的に報道されたことは, 前にも後にも例がない&quot;との記述も<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>．1980年代には<strong>Krylov部分空間法</strong>として再定式化されたことでも有名．ちなみにKrylov部分空間法は<strong>20世紀のトップ10アルゴリズム</strong>の１つである．この記事では，共役勾配法はどこから来たのか，何がすごいのか，そして，Krylov部分空間法とは何者か簡単に説明する．実験に使ったJuliaプログラムは<a href="https://github.com/kitano-AppMath/my-julia-works/blob/main/Conjugate-Gradient.ipynb">こちら</a>．</p>
+<h2 id="共役勾配法を利用するメリット">共役勾配法を利用するメリット</h2>
+<p>　共役勾配法はなぜこれほどまで注目されたのだろうか．この解法の特に優れた点を以下に挙げてみよう．</p>
+<ul>
+<li><span style="background: linear-gradient(transparent 50%, #fafba4 30%);">原理的には</span>
+，有限回の反復で厳密解に収束する</li>
+<li>行列の全成分を知らなくても, <span style="background: linear-gradient(transparent 50%, #fafba4 30%);">行列-ベクトル積が分かれば</span>
+アルゴリズム自体は動く</li>
+<li><strong>fill in</strong>を回避できる（＝行列の疎性が壊れない）</li>
+</ul>
+<p>１点目に関して補足すると，理論上は$n\times n$の係数行列に対して$n$回の反復で収束するが，実際の計算では<span style="background: linear-gradient(transparent 50%, #fafba4 30%);">丸め誤差の影響で，収束により多くの反復を要する</span>
+ことがある．２点目に関しては，極論，係数行列の中身が分からなくても良い．とにかくベクトル行列式を計算する関数さえ定義できれば良いのだ．３点目に関して，<strong>fill in</strong>とは，係数行列の零成分が反復の途中で非零になる現象を指す．非零になった分メモリを確保する必要があり，余計にコストがかかるため，fill inは嬉しくない現象である．まあとにかく，共役勾配法を使わない手はない！（Juliaのデフォルトのソルバーは優秀なので自分でコードを組むことは少ないかもしれない．なお，共役勾配法を含むKrylob部分空間法を基にした数値解法を実装したパッケージは充実している模様．）</p>
+<h2 id="共役勾配法のアルゴリズム">共役勾配法のアルゴリズム</h2>
+<p>　詳細に入る前に，共役勾配法のアルゴリズムを示しておこう．</p>
+<div>
+<b>定義</b>（共役勾配法）
+<p>　共役勾配法とは，$n$次正方行列$A$，$n$次元ベクトル$b$に対して，連立一次方程式$Ax=b$の近似解列$\left\{ x_n \right\}_{n=0}^{\infty}$を次のように生成する方法を指す．</p>
+<p>Initialize $x_0$, and set $r_0=b-Ax_0$ and $p_0=r_0$.  <br>
+<b>for</b> $k=0, 1, \dots$ <b>do</b><br>
+&emsp;Update $\alpha_k = \frac{r_{k}^\top p_k}{p_k^{\top} Ap_k}$.  <br>
+&emsp;Update $x_{k+1} = x_k + \alpha_k p_k$.  <br>
+&emsp;Update $r_{k+1} = b - Ax_{k+1}$.  <br>
+&emsp;Update $\beta_k = -\frac{r_{k+1}^\top Ap_k}{p_k^{\top} Ap_k}$.  <br>
+&emsp;Update $p_{k+1} = r_{k+1} + \beta_k p_k$.  <br>
+<b>end</b></p>
+</div>
+<h2 id="２つのストーリー">２つのストーリー</h2>
+<p>　この記事では，数値解析の書籍<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup><sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup><sup id="fnref:5"><a href="#fn:5" class="footnote-ref" role="doc-noteref">5</a></sup><sup id="fnref:6"><a href="#fn:6" class="footnote-ref" role="doc-noteref">6</a></sup>を参考に，共役勾配法を２通りに説明する．一つは最適化問題から出発してアルゴリズムを構成していくパターン，２つ目はKrylov部分空間法の観点から共役勾配法を俯瞰するパターンである．両者は仮定がやや異なり，後者の方がより一般の場合に適用できる．</p>
+<h1 id="共役勾配法を構成する">共役勾配法を構成する</h1>
+<h2 id="解の特徴づけ">解の特徴づけ</h2>
+<div>
+<p>　本節では，係数行列$A$が<b>正定値対称行列</b>であるとする．このとき，連立一次方程式$Ax=b$には解が一意に存在することに注意して，次のような関数を考えよう：
+\begin{equation}
+    \Phi (\xi) = \frac{1}{2}(\xi-x)^{\top}A(\xi-x).  
+\end{equation}
+この関数は解$x$で唯一の最小値をとることに着目し，ここでは<b>関数の最小化アルゴリズムから共役勾配法を構成</b>してみよう．</p>
+</div>
+<div>
+<p>　最小化アルゴリズムといえば，最急降下法だろう．現在の解の候補$x_k$における目的関数の勾配を計算すると，
+\begin{equation}
+    \nabla \Phi (\xi_k) = Ax_k - b = -r_k
+\end{equation}
+である．ただし，$r_k=b-Ax_k$は残差と呼ばれる．以上から，次の更新式が候補となる：
+\begin{equation}
+x_{k+1} = x_k + \alpha_k r_k.  
+\end{equation}
+実は，共役勾配法はこれを修正したものである．ということで，修正の方針について述べよう．共役勾配法における更新方向ベクトル$\{p_0, p_1, \dots \}$は，最急降下法における更新方向ベクトル$\{r_0, r_1, \dots\}$を，内積$(x,y)\mapsto x^\top Ay$に関して直交化したものである．</p>
+</div>
+<h2 id="直交化">直交化</h2>
+<p>　残差ベクトルを直交化して更新方向のベクトルを構成しよう．本節の詳しい証明は専門書を参照されたい<sup id="fnref1:6"><a href="#fn:6" class="footnote-ref" role="doc-noteref">6</a></sup>．</p>
+<div>
+<p>　Gram-Schmidtの正規直交化により，$p_0=r_0$および
+\begin{equation}
+    p_{k+1} = r_{k+1} - \sum_{j=1}^{k}\frac{r_{k+1}^\top Ap_j}{p_j^{\top} Ap_j}p_j, \quad (k=0, 1, \dots)
+\end{equation}
+と定義する．このとき，右辺第２項の和の大部分が消え
+\begin{equation}
+    p_{k+1} = r_{k+1} + \beta_k p_j, \quad \beta_k = -\frac{r_{k+1}^\top Ap_k}{p_k^{\top} Ap_k}
+\end{equation}
+となることを示すことができる．こうして得られる更新方向ベクトルを用いて，解を
+\begin{equation}
+    x_{k+1} = x_k + \alpha_k p_k
+\end{equation}
+と更新すれば，共役勾配法のアルゴリズムが得られる．</p>
+<p>　さて，こうして得られたアルゴリズムには次のようなメリットがある．残差ベクトル同士は標準内積に関して直交する．したがって，最初の$n$反復で得られたベクトル同士は直交系となり，それ以降の残差ベクトルはゼロベクトルとなる．すなわち，$n$反復で<b>厳密解に到達する</b>．しかし，実際には丸め誤差などの影響でより多くの反復を要することが多い．</p>
+</div>
+<h1 id="共役勾配法を俯瞰する">共役勾配法を俯瞰する</h1>
+<p>　本節では，係数行列$A$が<strong>対称行列</strong>であるとする．</p>
+<h2 id="krylov部分空間法">Krylov部分空間法</h2>
+<div>
+<b>定義</b>（Krylov部分空間）
+<p>　非零ベクトル$v\in\mathbb{R}^n$，行列$A\in\mathbb{R}^{n\times n}$，自然数$m(\leq n)$に対して，$v, Av, A^2v, \dots, A^{m-1}v$が一次独立であるとき，集合
+\begin{equation}
+    K_m(A, v) = \mathrm{span} \left\{v, Av, A^2v, \dots, A^{m-1}v \right\}
+\end{equation}
+を行列$A$とベクトル$v$に関する$m$次のKrylov部分空間という．</p>  
+</div>
+<p>Krylov部分空間を次のように用いた解法を一般にKrylov部分空間法という．</p>
+<div>  
+<b>定義</b>（Krylov部分空間法）
+<p>　連立一次方程式$Ax=b$の初期近似解$x_0$と初期残差$r_0=b-Ax_0$に対して，
+\begin{equation}
+    x_k = x_0 + z_k , \quad z_k\in K_k(A, r_0)
+\end{equation}
+のように近似解列を構成する方法を，Krylov部分空間法という．</p>
+</div>
+<h2 id="直交化-1">直交化</h2>
+<h2 id="共役勾配法の位置づけ">共役勾配法の位置づけ</h2>
+<h1 id="数値実験">数値実験</h1>
+<p>　本節では，共役勾配法の数値実験例を２つほど紹介する．</p>
+<h2 id="例１密行列の場合">例１：密行列の場合</h2>
+<img src="https://kitano-AppMath.github.io/kitano_blog/2023-02-19/fig1.png" alt="実験結果" /> 
+<p>　係数行列</p>
+<img src="https://kitano-AppMath.github.io/kitano_blog/2023-02-19/fig2.png" alt="実験結果" /> 
+<h2 id="例２疎行列の場合">例２：疎行列の場合</h2>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p>M. R. Hestenes and E. Stiefel. Methods of conjugate gradients for solving linear systems. <em>Journal of research of the National Bureau of Standards</em>, <strong>49</strong>(1952), pp. 409-436.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2">
+<p>戸川隼人. 共役勾配法. 教育出版, 1977.&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:3">
+<p>R. Barrett, T. F. Chan, J. Donato, M. Berry and J. Demmel. 反復法Templates. 朝倉書店, 1996.&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:4">
+<p>藤野清次 and 張紹良. 反復法の数理. 朝倉書店, 1996.&#160;<a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:5">
+<p>森正武. 数値解析 第２版. 共立出版, 2002.&#160;<a href="#fnref:5" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:6">
+<p>杉原正顕 and 室田一雄. 線形計算の数理. 岩波書店, 2016.&#160;<a href="#fnref:6" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a>&#160;<a href="#fnref1:6" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
+
+</div>
+
+  
+<footer class='entry-footer'>
+  <div class='container sep-before'><div class='tags'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M20.59,13.41l-7.17,7.17a2,2,0,0,1-2.83,0L2,12V2H12l8.59,8.59A2,2,0,0,1,20.59,13.41Z" />
+<line x1="7" y1="7" x2="7" y2="7" />
+</svg>
+<span class='screen-reader-text'>Tags: </span><a class='tag' href='https://kitano-AppMath.github.io/kitano_blog/tags/krylov%E9%83%A8%E5%88%86%E7%A9%BA%E9%96%93%E6%B3%95/'>Krylov部分空間法</a>, <a class='tag' href='https://kitano-AppMath.github.io/kitano_blog/tags/%E6%95%B0%E5%80%A4%E8%A7%A3%E6%B3%95/'>数値解法</a>, <a class='tag' href='https://kitano-AppMath.github.io/kitano_blog/tags/%E9%80%A3%E7%AB%8B%E4%B8%80%E6%AC%A1%E6%96%B9%E7%A8%8B%E5%BC%8F/'>連立一次方程式</a>, <a class='tag' href='https://kitano-AppMath.github.io/kitano_blog/tags/%E5%85%B1%E5%BD%B9%E5%8B%BE%E9%85%8D%E6%B3%95/'>共役勾配法</a></div>
+
+  </div>
+</footer>
+
+
+</article>
+
+<nav class='entry-nav'>
+  <div class='container'><div class='prev-entry sep-before'>
+      <a href='https://kitano-AppMath.github.io/kitano_blog/posts/2023-02-18/'>
+        <span aria-hidden='true'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="20" y1="12" x2="4" y2="12" />
+<polyline points="10 18 4 12 10 6" />
+</svg>
+ Previous</span>
+        <span class='screen-reader-text'>Previous post: </span>Gershgorinの定理</a>
+    </div></div>
+</nav>
+
+
+
+
+      </main>
+
+      <footer id='footer' class='footer'>
+        <div class='container sep-before'><div class='copyright'>
+  <p> &copy; 2023 kitano </p>
+</div>
+
+        </div>
+      </footer>
+
+    </div>
+  </div><script>window.__assets_js_src="https://kitano-AppMath.github.io/kitano_blog/assets/js/"</script>
+
+<script src='https://kitano-AppMath.github.io/kitano_blog/assets/js/main.c3bcf2df.js'></script><script src='https://kitano-AppMath.github.io/kitano_blog/js/custom.js'></script><script type='text/x-mathjax-config'>
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"processEscapes":true}})
+</script>
+
+<script type='text/javascript' async src='//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML'></script>
+
+</body>
+
+</html>
+
