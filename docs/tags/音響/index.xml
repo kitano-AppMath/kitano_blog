@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>音響 on 数値実験部屋</title>
+    <link>https://kitano-AppMath.github.io/kitano_blog/tags/%E9%9F%B3%E9%9F%BF/</link>
+    <description>Recent content in 音響 on 数値実験部屋</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <lastBuildDate>Sat, 03 Jun 2023 02:39:10 +0900</lastBuildDate><atom:link href="https://kitano-AppMath.github.io/kitano_blog/tags/%E9%9F%B3%E9%9F%BF/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>missing fundamental</title>
+      <link>https://kitano-AppMath.github.io/kitano_blog/posts/2023-06-03/</link>
+      <pubDate>Sat, 03 Jun 2023 02:39:10 +0900</pubDate>
+      
+      <guid>https://kitano-AppMath.github.io/kitano_blog/posts/2023-06-03/</guid>
+      <description>目次 missing fundamental 音響信号処理の基礎知識 音波の基礎知識 基音と倍音 ピッチ 改めて，missing fundamentalとは 数値実験 missing fundamental missing fundamentalとは，基音と倍音から構成される音から基音を取り除いた倍音列を聴いても，人間は元の音と同じピッチを知覚する 現象のことである．このままではよく分からないので，一つずつ紐解いていこう．実験に使ったJuliaプログラムはこちら．
+音響信号処理の基礎知識 音響信号処理の用語をいくつか整理しておこう．
+音波の基礎知識 音とは，空気中や水中を伝搬する振動のことである．また，物理的な現象としての音が引き起こす（人間の）聴覚的感覚も音と呼ばれる．missing fundamentalは人間の知覚に関する現象であり，この記事では両方の「音」を扱う．物理現象としての音を記述する物理量として振幅や周波数，音圧が代表的である．この記事では，周波数と，音の高さの感覚であるピッチについて軽く触れる．
+基音と倍音 普通，音は複数の周波数成分から構成される．ここで，周波数とは，単位時間あたりの波の数を指す．この複数の周波数成分のうち，最も低い周波数成分は基音と呼ばれる．また，基音の周波数の整数倍 の周波数のうち，ただ１つを成分として持つ音を倍音と呼ぶ．例えば，200Hzの音を基音とするとき，600Hzや1000Hzの音は，いずれもその倍音である．
+ピッチ 音の高さの感覚 をピッチと呼ぶ．ピッチはおおよそ周波数で決まり，その間の関係はメル尺度によって記述される．要するに，周波数が大きいほど，その音は高いと知覚されるということだ．
+改めて，missing fundamentalとは 改めて，missing fundamentalについて考えてみよう．いま，ある基音とその倍音から構成される音が発生したとする．人間はこの音を知覚するとき，ピッチにより音の高さを感じる．いま，発せられた音から基音を取り除いてみよう．基音を除く倍音のみからなる音を人間が聞くとどうなるだろうか．普通は低周波数成分が消えるのだから，元の音より高く聞こえるだろう．しかし，人間は元の音と同じくらいの高さを感じてしまう ．この現象をmissing fundamentalと呼ぶ．言い換えれば，我々は，残った周波数成分の最大公約数の周波数成分を勝手に補ってしまうということだ．
+数値実験 Juliaを使って音響信号を作成し，実験を行った．200Hz，1000Hz，1200Hz，1400Hz，1600Hzを合成した音を以下で再生できる．
+【オリジナルの音】
+この音から，基音200Hzを取り除いた音を以下で再生できる．
+【基音を取り除いた音】
+確かに，低周波成分が残っているように聞こえる&amp;hellip;</description>
+    </item>
+    
+  </channel>
+</rss>

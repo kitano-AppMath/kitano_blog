@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang='en' dir='auto'><head>
+  <meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta name='description' content='目次 missing fundamental 音響信号処理の基礎知識 音波の基礎知識 基音と倍音 ピッチ 改めて，missing fundamentalとは 数値実験 missing fundamental missing fundamentalとは，基音と倍音から構成される音から基音を取り除いた倍音列を聴いても，人間は元の音と同じピッチを知覚する 現象のことである．このままではよく分からないので，一つずつ紐解いていこう．実験に使ったJuliaプログラムはこちら．
+音響信号処理の基礎知識 音響信号処理の用語をいくつか整理しておこう．
+音波の基礎知識 音とは，空気中や水中を伝搬する振動のことである．また，物理的な現象としての音が引き起こす（人間の）聴覚的感覚も音と呼ばれる．missing fundamentalは人間の知覚に関する現象であり，この記事では両方の「音」を扱う．物理現象としての音を記述する物理量として振幅や周波数，音圧が代表的である．この記事では，周波数と，音の高さの感覚であるピッチについて軽く触れる．
+基音と倍音 普通，音は複数の周波数成分から構成される．ここで，周波数とは，単位時間あたりの波の数を指す．この複数の周波数成分のうち，最も低い周波数成分は基音と呼ばれる．また，基音の周波数の整数倍 の周波数のうち，ただ１つを成分として持つ音を倍音と呼ぶ．例えば，200Hzの音を基音とするとき，600Hzや1000Hzの音は，いずれもその倍音である．
+ピッチ 音の高さの感覚 をピッチと呼ぶ．ピッチはおおよそ周波数で決まり，その間の関係はメル尺度によって記述される．要するに，周波数が大きいほど，その音は高いと知覚されるということだ．
+改めて，missing fundamentalとは 改めて，missing fundamentalについて考えてみよう．いま，ある基音とその倍音から構成される音が発生したとする．人間はこの音を知覚するとき，ピッチにより音の高さを感じる．いま，発せられた音から基音を取り除いてみよう．基音を除く倍音のみからなる音を人間が聞くとどうなるだろうか．普通は低周波数成分が消えるのだから，元の音より高く聞こえるだろう．しかし，人間は元の音と同じくらいの高さを感じてしまう ．この現象をmissing fundamentalと呼ぶ．言い換えれば，我々は，残った周波数成分の最大公約数の周波数成分を勝手に補ってしまうということだ．
+数値実験 Juliaを使って音響信号を作成し，実験を行った．200Hz，1000Hz，1200Hz，1400Hz，1600Hzを合成した音を以下で再生できる．
+【オリジナルの音】
+この音から，基音200Hzを取り除いた音を以下で再生できる．
+【基音を取り除いた音】
+確かに，低周波成分が残っているように聞こえる&hellip;'>
+<meta name='theme-color' content='#ffcd00'>
+
+<meta property='og:title' content='missing fundamental • 数値実験部屋'>
+<meta property='og:description' content='目次 missing fundamental 音響信号処理の基礎知識 音波の基礎知識 基音と倍音 ピッチ 改めて，missing fundamentalとは 数値実験 missing fundamental missing fundamentalとは，基音と倍音から構成される音から基音を取り除いた倍音列を聴いても，人間は元の音と同じピッチを知覚する 現象のことである．このままではよく分からないので，一つずつ紐解いていこう．実験に使ったJuliaプログラムはこちら．
+音響信号処理の基礎知識 音響信号処理の用語をいくつか整理しておこう．
+音波の基礎知識 音とは，空気中や水中を伝搬する振動のことである．また，物理的な現象としての音が引き起こす（人間の）聴覚的感覚も音と呼ばれる．missing fundamentalは人間の知覚に関する現象であり，この記事では両方の「音」を扱う．物理現象としての音を記述する物理量として振幅や周波数，音圧が代表的である．この記事では，周波数と，音の高さの感覚であるピッチについて軽く触れる．
+基音と倍音 普通，音は複数の周波数成分から構成される．ここで，周波数とは，単位時間あたりの波の数を指す．この複数の周波数成分のうち，最も低い周波数成分は基音と呼ばれる．また，基音の周波数の整数倍 の周波数のうち，ただ１つを成分として持つ音を倍音と呼ぶ．例えば，200Hzの音を基音とするとき，600Hzや1000Hzの音は，いずれもその倍音である．
+ピッチ 音の高さの感覚 をピッチと呼ぶ．ピッチはおおよそ周波数で決まり，その間の関係はメル尺度によって記述される．要するに，周波数が大きいほど，その音は高いと知覚されるということだ．
+改めて，missing fundamentalとは 改めて，missing fundamentalについて考えてみよう．いま，ある基音とその倍音から構成される音が発生したとする．人間はこの音を知覚するとき，ピッチにより音の高さを感じる．いま，発せられた音から基音を取り除いてみよう．基音を除く倍音のみからなる音を人間が聞くとどうなるだろうか．普通は低周波数成分が消えるのだから，元の音より高く聞こえるだろう．しかし，人間は元の音と同じくらいの高さを感じてしまう ．この現象をmissing fundamentalと呼ぶ．言い換えれば，我々は，残った周波数成分の最大公約数の周波数成分を勝手に補ってしまうということだ．
+数値実験 Juliaを使って音響信号を作成し，実験を行った．200Hz，1000Hz，1200Hz，1400Hz，1600Hzを合成した音を以下で再生できる．
+【オリジナルの音】
+この音から，基音200Hzを取り除いた音を以下で再生できる．
+【基音を取り除いた音】
+確かに，低周波成分が残っているように聞こえる&hellip;'>
+<meta property='og:url' content='https://kitano-AppMath.github.io/kitano_blog/posts/2023-06-03/'>
+<meta property='og:site_name' content='数値実験部屋'>
+<meta property='og:type' content='article'><meta property='article:section' content='posts'><meta property='article:tag' content='信号処理'><meta property='article:tag' content='音響'><meta property='article:tag' content='Julia言語'><meta property='article:published_time' content='2023-06-03T02:39:10&#43;09:00'/><meta property='article:modified_time' content='2023-06-03T02:39:10&#43;09:00'/><meta name='twitter:card' content='summary'>
+
+<meta name="generator" content="Hugo 0.106.0">
+
+  <title>missing fundamental • 数値実験部屋</title>
+  <link rel='canonical' href='https://kitano-AppMath.github.io/kitano_blog/posts/2023-06-03/'>
+  
+  
+  <link rel='icon' href='https://kitano-AppMath.github.io/kitano_blog/shark.png'>
+<link rel='stylesheet' href='https://kitano-AppMath.github.io/kitano_blog/assets/css/main.ab98e12b.css'><link rel='stylesheet' href='https://kitano-AppMath.github.io/kitano_blog/css/custom.css'><style>
+:root{--color-accent:#ffcd00;}
+</style>
+
+  
+
+</head>
+<body class='page type-posts has-sidebar'>
+
+  <div class='site'><div id='sidebar' class='sidebar'>
+  <a class='screen-reader-text' href='#main-menu'>Skip to Main Menu</a>
+
+  <div class='container'><section class='widget widget-about sep-after'>
+  <header>
+    
+    <div class='logo'>
+      <a href='https://kitano-AppMath.github.io/kitano_blog/'>
+        <img src='https://kitano-AppMath.github.io/kitano_blog/shark.png'>
+      </a>
+    </div>
+    
+    <h2 class='title site-title '>
+      <a href='https://kitano-AppMath.github.io/kitano_blog/'>
+      数値実験部屋
+      </a>
+    </h2>
+    <div class='desc'>
+    
+    </div>
+  </header>
+
+</section>
+<section class='widget widget-recent_posts sep-after'>
+  <header>
+    <h4 class='title widget-title'>最新記事</h4>
+  </header>
+
+  <ul class='list'>
+  
+    <li class='item'>
+  <div class='meta'>
+    <span>
+  <span class='screen-reader-text'>Posted on </span>
+  <time datetime='2023-06-03T02:39:10&#43;09:00'>2023/06/03</time>
+</span>
+
+  </div>
+  <header class='item-header'>
+    <h3 class='item-title'>
+      <a href='https://kitano-AppMath.github.io/kitano_blog/posts/2023-06-03/'>missing fundamental</a>
+    </h3>
+  </header>
+</li>
+
+  
+    <li class='item'>
+  <div class='meta'>
+    <span>
+  <span class='screen-reader-text'>Posted on </span>
+  <time datetime='2023-02-19T23:38:01&#43;09:00'>2023/02/19</time>
+</span>
+
+  </div>
+  <header class='item-header'>
+    <h3 class='item-title'>
+      <a href='https://kitano-AppMath.github.io/kitano_blog/posts/2023-02-19/'>共役勾配法</a>
+    </h3>
+  </header>
+</li>
+
+  
+    <li class='item'>
+  <div class='meta'>
+    <span>
+  <span class='screen-reader-text'>Posted on </span>
+  <time datetime='2023-02-18T00:21:07&#43;09:00'>2023/02/18</time>
+</span>
+
+  </div>
+  <header class='item-header'>
+    <h3 class='item-title'>
+      <a href='https://kitano-AppMath.github.io/kitano_blog/posts/2023-02-18/'>Gershgorinの定理</a>
+    </h3>
+  </header>
+</li>
+
+  
+    <li class='item'>
+  <div class='meta'>
+    <span>
+  <span class='screen-reader-text'>Posted on </span>
+  <time datetime='2023-02-14T11:12:15&#43;09:00'>2023/02/14</time>
+</span>
+
+  </div>
+  <header class='item-header'>
+    <h3 class='item-title'>
+      <a href='https://kitano-AppMath.github.io/kitano_blog/posts/2023-02-14/'>Arnoldの猫写像</a>
+    </h3>
+  </header>
+</li>
+
+  
+  </ul>
+</section>
+<section class='widget widget-taxonomy_cloud sep-after'>
+  <header>
+    <h4 class='title widget-title'>タグ</h4>
+  </header>
+
+  <div class='container list-container'>
+  <ul class='list taxonomy-cloud'><li>
+        <a href='https://kitano-AppMath.github.io/kitano_blog/tags/bayes/' style='font-size:1em'>Bayes</a>
+      </li><li>
+        <a href='https://kitano-AppMath.github.io/kitano_blog/tags/julia%E8%A8%80%E8%AA%9E/' style='font-size:2em'>Julia言語</a>
+      </li><li>
+        <a href='https://kitano-AppMath.github.io/kitano_blog/tags/krylov%E9%83%A8%E5%88%86%E7%A9%BA%E9%96%93%E6%B3%95/' style='font-size:1em'>Krylov部分空間法</a>
+      </li><li>
+        <a href='https://kitano-AppMath.github.io/kitano_blog/tags/%E3%82%AB%E3%82%AA%E3%82%B9/' style='font-size:1em'>カオス</a>
+      </li><li>
+        <a href='https://kitano-AppMath.github.io/kitano_blog/tags/%E4%BF%A1%E5%8F%B7%E5%87%A6%E7%90%86/' style='font-size:1em'>信号処理</a>
+      </li><li>
+        <a href='https://kitano-AppMath.github.io/kitano_blog/tags/%E5%85%B1%E5%BD%B9%E5%8B%BE%E9%85%8D%E6%B3%95/' style='font-size:1em'>共役勾配法</a>
+      </li><li>
+        <a href='https://kitano-AppMath.github.io/kitano_blog/tags/%E5%9B%BA%E6%9C%89%E5%80%A4/' style='font-size:1em'>固有値</a>
+      </li><li>
+        <a href='https://kitano-AppMath.github.io/kitano_blog/tags/%E5%A4%89%E5%88%86%E6%8E%A8%E8%AB%96%E6%B3%95/' style='font-size:1em'>変分推論法</a>
+      </li><li>
+        <a href='https://kitano-AppMath.github.io/kitano_blog/tags/%E6%95%B0%E5%80%A4%E8%A7%A3%E6%B3%95/' style='font-size:1em'>数値解法</a>
+      </li><li>
+        <a href='https://kitano-AppMath.github.io/kitano_blog/tags/%E8%A1%8C%E5%88%97/' style='font-size:1em'>行列</a>
+      </li><li>
+        <a href='https://kitano-AppMath.github.io/kitano_blog/tags/%E9%80%A3%E7%AB%8B%E4%B8%80%E6%AC%A1%E6%96%B9%E7%A8%8B%E5%BC%8F/' style='font-size:1em'>連立一次方程式</a>
+      </li><li>
+        <a href='https://kitano-AppMath.github.io/kitano_blog/tags/%E9%9F%B3%E9%9F%BF/' style='font-size:1em'>音響</a>
+      </li></ul>
+</div>
+
+
+</section>
+</div>
+
+  <div class='sidebar-overlay'></div>
+</div><div class='main'><nav id='main-menu' class='menu main-menu' aria-label='Main Menu'>
+  <div class='container'>
+    <a class='screen-reader-text' href='#content'>Skip to Content</a>
+
+<button id='sidebar-toggler' class='sidebar-toggler' aria-controls='sidebar'>
+  <span class='screen-reader-text'>Toggle Sidebar</span>
+  <span class='open'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="3" y1="12" x2="21" y2="12" />
+<line x1="3" y1="6" x2="21" y2="6" />
+<line x1="3" y1="18" x2="21" y2="18" />
+</svg>
+</span>
+  <span class='close'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="18" y1="6" x2="6" y2="18" />
+<line x1="6" y1="6" x2="18" y2="18" />
+</svg>
+</span>
+</button>
+    <ul><li class='item'>
+        <a href='https://kitano-AppMath.github.io/kitano_blog/'>ホーム</a>
+      </li><li class='item'>
+        <a href='https://kitano-AppMath.github.io/kitano_blog/posts/'>記事一覧</a>
+      </li><li class='item'>
+        <a href='https://twitter.com/kitano_blog'>Twitter</a>
+      </li><li class='item'>
+        <a href='https://github.com/kitano-AppMath'>GitHub</a>
+      </li><li class='item'>
+        <a href='https://kitano-AppMath.github.io/kitano_blog/aboutme'>中の人</a>
+      </li></ul>
+  </div>
+</nav><div class='header-widgets'>
+        <div class='container'></div>
+      </div>
+
+      <header id='header' class='header site-header'>
+        <div class='container sep-after'>
+          <div class='header-info'><p class='site-title title'>数値実験部屋</p><p class='desc site-desc'></p>
+          </div>
+        </div>
+      </header>
+
+      <main id='content'>
+
+
+<article lang='en' class='entry'>
+  <header class='header entry-header'>
+  <div class='container sep-after'>
+    <div class='header-info'>
+      <h1 class='title'>missing fundamental</h1>
+      
+
+    </div>
+    <div class='entry-meta'>
+  <span class='posted-on'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+<line x1="16" y1="2" x2="16" y2="6" />
+<line x1="8" y1="2" x2="8" y2="6" />
+<line x1="3" y1="10" x2="21" y2="10" />
+</svg>
+<span class='screen-reader-text'>Posted on </span>
+  <time class='entry-date' datetime='2023-06-03T02:39:10&#43;09:00'>2023/06/ 03</time>
+</span>
+
+  
+  
+<span class='reading-time'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><circle cx="12" cy="12" r="10" />
+<polyline points="12 6 12 12 15 15" />
+</svg>
+One min read
+</span>
+
+
+</div>
+
+
+  </div>
+</header>
+
+  
+  
+
+  <div class='container entry-content'>
+  <div>
+    <h2>目次</h2>
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#missing-fundamental">missing fundamental</a>
+      <ul>
+        <li><a href="#音響信号処理の基礎知識">音響信号処理の基礎知識</a>
+          <ul>
+            <li><a href="#音波の基礎知識">音波の基礎知識</a></li>
+            <li><a href="#基音と倍音">基音と倍音</a></li>
+            <li><a href="#ピッチ">ピッチ</a></li>
+          </ul>
+        </li>
+        <li><a href="#改めてmissing-fundamentalとは">改めて，missing fundamentalとは</a></li>
+      </ul>
+    </li>
+    <li><a href="#数値実験">数値実験</a></li>
+  </ul>
+</nav>
+</div>
+
+<hr>
+<h1 id="missing-fundamental">missing fundamental</h1>
+<p>　<strong>missing fundamental</strong>とは，<span style="background: linear-gradient(transparent 50%, #fafba4 30%);">基音と倍音から構成される音から基音を取り除いた倍音列を聴いても，人間は元の音と同じピッチを知覚する</span>
+現象のことである．このままではよく分からないので，一つずつ紐解いていこう．実験に使ったJuliaプログラムは<a href="https://github.com/kitano-AppMath/my-julia-works/blob/main/Conjugate-Gradient.ipynb">こちら</a>．</p>
+<h2 id="音響信号処理の基礎知識">音響信号処理の基礎知識</h2>
+<p>　音響信号処理の用語をいくつか整理しておこう．</p>
+<h3 id="音波の基礎知識">音波の基礎知識</h3>
+<p>　<strong>音</strong>とは，空気中や水中を伝搬する振動のことである．また，物理的な現象としての音が引き起こす（人間の）聴覚的感覚も音と呼ばれる．missing fundamentalは人間の知覚に関する現象であり，この記事では両方の「音」を扱う．物理現象としての音を記述する物理量として振幅や周波数，音圧が代表的である．この記事では，<strong>周波数</strong>と，音の高さの感覚である<strong>ピッチ</strong>について軽く触れる．</p>
+<h3 id="基音と倍音">基音と倍音</h3>
+<p>　普通，音は複数の周波数成分から構成される．ここで，周波数とは，単位時間あたりの波の数を指す．この複数の周波数成分のうち，最も低い周波数成分は<strong>基音</strong>と呼ばれる．また，<span style="background: linear-gradient(transparent 50%, #fafba4 30%);">基音の周波数の整数倍</span>
+ の周波数のうち，ただ１つを成分として持つ音を<strong>倍音</strong>と呼ぶ．例えば，200Hzの音を基音とするとき，600Hzや1000Hzの音は，いずれもその倍音である．</p>
+<h3 id="ピッチ">ピッチ</h3>
+<p>　<span style="background: linear-gradient(transparent 50%, #fafba4 30%);">音の高さの感覚</span>
+を<strong>ピッチ</strong>と呼ぶ．ピッチはおおよそ周波数で決まり，その間の関係はメル尺度によって記述される．要するに，周波数が大きいほど，その音は高いと知覚されるということだ．</p>
+<h2 id="改めてmissing-fundamentalとは">改めて，missing fundamentalとは</h2>
+<p>　改めて，missing fundamentalについて考えてみよう．いま，ある基音とその倍音から構成される音が発生したとする．人間はこの音を知覚するとき，ピッチにより音の高さを感じる．いま，発せられた音から基音を取り除いてみよう．基音を除く倍音のみからなる音を人間が聞くとどうなるだろうか．普通は低周波数成分が消えるのだから，元の音より高く聞こえるだろう．しかし，<span style="background: linear-gradient(transparent 50%, #fafba4 30%);">人間は元の音と同じくらいの高さを感じてしまう</span>
+．この現象をmissing fundamentalと呼ぶ．言い換えれば，我々は，残った周波数成分の最大公約数の周波数成分を勝手に補ってしまうということだ．</p>
+<h1 id="数値実験">数値実験</h1>
+<p>　Juliaを使って音響信号を作成し，実験を行った．200Hz，1000Hz，1200Hz，1400Hz，1600Hzを合成した音を以下で再生できる．</p>
+<p><strong>【オリジナルの音】</strong></p>
+<div>
+    <audio controls volume=0.5 src="https://kitano-AppMath.github.io/kitano_blog/2023-06-03/original_sound.wav"></audio>
+</div>
+<p>この音から，基音200Hzを取り除いた音を以下で再生できる．</p>
+<p><strong>【基音を取り除いた音】</strong></p>
+<div>
+    <audio controls volume=0.5 src="https://kitano-AppMath.github.io/kitano_blog/2023-06-03/missing_sound.wav"></audio>
+</div>
+<p>確かに，低周波成分が残っているように聞こえる&hellip;</p>
+
+</div>
+
+  
+<footer class='entry-footer'>
+  <div class='container sep-before'><div class='tags'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M20.59,13.41l-7.17,7.17a2,2,0,0,1-2.83,0L2,12V2H12l8.59,8.59A2,2,0,0,1,20.59,13.41Z" />
+<line x1="7" y1="7" x2="7" y2="7" />
+</svg>
+<span class='screen-reader-text'>Tags: </span><a class='tag' href='https://kitano-AppMath.github.io/kitano_blog/tags/%E4%BF%A1%E5%8F%B7%E5%87%A6%E7%90%86/'>信号処理</a>, <a class='tag' href='https://kitano-AppMath.github.io/kitano_blog/tags/%E9%9F%B3%E9%9F%BF/'>音響</a>, <a class='tag' href='https://kitano-AppMath.github.io/kitano_blog/tags/julia%E8%A8%80%E8%AA%9E/'>Julia言語</a></div>
+
+  </div>
+</footer>
+
+
+</article>
+
+<nav class='entry-nav'>
+  <div class='container'><div class='prev-entry sep-before'>
+      <a href='https://kitano-AppMath.github.io/kitano_blog/posts/2023-02-19/'>
+        <span aria-hidden='true'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="20" y1="12" x2="4" y2="12" />
+<polyline points="10 18 4 12 10 6" />
+</svg>
+ Previous</span>
+        <span class='screen-reader-text'>Previous post: </span>共役勾配法</a>
+    </div></div>
+</nav>
+
+
+
+
+      </main>
+
+      <footer id='footer' class='footer'>
+        <div class='container sep-before'><div class='copyright'>
+  <p> &copy; 2023 kitano </p>
+</div>
+
+        </div>
+      </footer>
+
+    </div>
+  </div><script>window.__assets_js_src="https://kitano-AppMath.github.io/kitano_blog/assets/js/"</script>
+
+<script src='https://kitano-AppMath.github.io/kitano_blog/assets/js/main.c3bcf2df.js'></script><script src='https://kitano-AppMath.github.io/kitano_blog/js/custom.js'></script><script type='text/x-mathjax-config'>
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"processEscapes":true}})
+</script>
+
+<script type='text/javascript' async src='//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML'></script>
+
+</body>
+
+</html>
+
