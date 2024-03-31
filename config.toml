@@ -149,11 +149,6 @@ page = "/:slug/"
         identifier = "github"
         url = "https://github.com/kitano-AppMath"
 [[menu.main]]
-        name = "Twitter"
-        weight = 3
-        identifier = "twitter"
-        url = "https://twitter.com/kitano_blog"
-[[menu.main]]
         name = "ホーム"
         weight = 1
         identifier = "home"
