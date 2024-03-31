@@ -6,16 +6,7 @@
     <description>Recent content in Bayes on 数値実験部屋</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Sun, 04 Jun 2023 09:59:15 +0900</lastBuildDate><atom:link href="https://kitano-AppMath.github.io/kitano_blog/tags/bayes/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>2023 06 04</title>
-      <link>https://kitano-AppMath.github.io/kitano_blog/posts/2023-06-04/</link>
-      <pubDate>Sun, 04 Jun 2023 09:59:15 +0900</pubDate>
-      
-      <guid>https://kitano-AppMath.github.io/kitano_blog/posts/2023-06-04/</guid>
-      <description> 目次 はじめに 経緯と概要 Metropolis-Hastings法を利用するメリット Metropolis-Hastings法のアルゴリズム MCMCの考え方 MCMCの基礎 Markov連鎖の基礎 詳細釣り合い条件 Metropolis-Hastings法 Metropolis-Hastings法の歴史 遷移核の決定 採択／棄却確率 提案分布の選び方 数値実験 はじめに 経緯と概要 Metropolis-Hastings法を利用するメリット Metropolis-Hastings法のアルゴリズム MCMCの考え方 MCMCの基礎 Markov連鎖の基礎 詳細釣り合い条件 Metropolis-Hastings法 Metropolis-Hastings法の歴史 遷移核の決定 採択／棄却確率 提案分布の選び方 数値実験 </description>
-    </item>
-    
+    <lastBuildDate>Fri, 10 Feb 2023 16:44:19 +0900</lastBuildDate><atom:link href="https://kitano-AppMath.github.io/kitano_blog/tags/bayes/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>変分推論法</title>
       <link>https://kitano-AppMath.github.io/kitano_blog/posts/2023-02-11/</link>
